@@ -1,0 +1,277 @@
+﻿@{ 
+    ViewBag.Title = "Tìm kiếm";
+}
+<div id="myheadersearch" class="pt-5 pb-3 bg-white position-fixed start-0 end-0 shadow shadow-sm shadow-lg d-none d-xl-block" style="z-index: 9998;">
+    <hr class="text-dark" style="margin-top: 40px;">
+    <div class="container">
+        <div class="row w-100">
+            <div class="col-lg-12">
+                <div class="row">
+                    <div class="col-lg-1">
+
+                    </div>
+                    <div class="col-lg-4">
+                        <input id="input-search" class="form-control mb-3" type="text" placeholder="Nhập dòng xe, đời xe, thương hiệu...">
+                    </div>
+                    <div class="col-lg-2">
+                        <fieldset>
+                            <input class="text-center border w-100" type="datetime-local" id="dateTimePickerStart" name="dateTimePicker" onchange="updateEndDate()" style="height: 36px;">
+                        </fieldset>
+                    </div>
+                    <div class="col-lg-2">
+                        <fieldset>
+                            <input class="text-center border w-100" type="datetime-local" id="dateTimePickerEnd" name="dateTimePicker" onchange="updateEndDate()" style="height: 36px;">
+                        </fieldset>
+                    </div>
+                    <div class="col-lg-2">
+                        <button class="btn btn-outline-success fs-6 w-100" type="submit">Tìm kiếm</button>
+                    </div>
+                    <div class="col-lg-1">
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-12">
+                <div class="row">
+                    <div class="col-lg-2">
+                        <select class="form-select text-body-tertiary border-0" aria-label="Default select example">
+                            <option disabled selected>Chọn loại xe</option>
+                            <option value="1">Ô tô</option>
+                            <option value="2">Xe máy</option>
+                            <option value="3">Xe đạp</option>
+                        </select>
+                    </div>
+                    <div class="col-lg-2">
+                        <select class="form-select text-body-tertiary border-0">
+                            <option disabled selected>Chọn loại hộp số</option>
+                            <option value="1">Số sàn</option>
+                            <option value="2">Số tự động</option>
+                        </select>
+                    </div>
+                    <div class="col-lg-2">
+                        <select class="form-select text-body-tertiary border-0">
+                            <option disabled selected>Chọn hãng xe</option>
+                            <option value="1">Audi</option>
+                            <option value="2">BMW</option>
+                            <option value="3">Honda</option>
+                        </select>
+                    </div>
+                    <div class="col-lg-2">
+                        <select class="form-select text-body-tertiary border-0">
+                            <option disabled selected>Chọn tỉnh</option>
+                            <option value="1">TP. Hồ Chí Minh</option>
+                            <option value="2">Hà Nội</option>
+                            <option value="3">Nha Trang</option>
+                        </select>
+                    </div>
+                    <div class="col-lg-2">
+                        <select class="form-select text-body-tertiary border-0">
+                            <option disabled selected>Chọn quận/huyện</option>
+                            <option value="1">Thủ Đức</option>
+                            <option value="2">Quận 1</option>
+                            <option value="3">Quận 9</option>
+                        </select>
+                    </div>
+                    <div class="col-lg-2">
+                        <select class="form-select text-body-tertiary border-0">
+                            <option value="1">Từ thấp đến cao</option>
+                            <option value="2">Từ cao đến thấp</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="myheadersearch" class="pt-5 pb-3 bg-white position-fixed start-0 end-0 shadow shadow-sm shadow-lg d-block d-xxl-none mt-md-6" style="z-index: 9997;">
+    <hr class="text-dark">
+    <div class="container">
+        <div class="row">
+            <div class="col-11">
+                <div style="height: 50px;">
+                    <div class="p-2 bg-body-tertiary w-100 h-100">
+                        <div class="row">
+                            <div class="col-7 col-sm-8 col-md-9 col-lg-10">
+                                <input id="input-search" class="form-control mb-3" type="text" placeholder="Tìm kiếm...">
+                            </div>
+                            <div class="col-5 col-sm-4 col-md-3 col-lg-2">
+                                <a href="#">
+                                    <button class="btn btn-outline-success fs-6" type="submit">Tìm kiếm</button>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-1 d-flex justify-content-center align-items-center">
+                <button class="btn" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasWithBothOptions" aria-controls="offcanvasWithBothOptions">
+                    <i class="fa-solid fa-arrow-down-wide-short fs-3"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="offcanvas offcanvas-start position-fixed" style="z-index: 9999;" data-bs-scroll="true" tabindex="-1" id="offcanvasWithBothOptions" aria-labelledby="offcanvasWithBothOptionsLabel">
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title fw-bold" id="offcanvasWithBothOptionsLabel">Bộ lọc</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body">
+        <span class="fw-lighter">Ngày nhận xe</span>
+        <fieldset>
+            <input class="text-center border w-100" type="datetime-local" id="dateTimePickerStart" name="dateTimePicker" onchange="updateEndDate()" style="height: 36px;">
+        </fieldset>
+
+        <span class="fw-lighter">Ngày trả xe</span>
+        <fieldset>
+            <input class="text-center border w-100" type="datetime-local" id="dateTimePickerEnd" name="dateTimePicker" onchange="updateEndDate()" style="height: 36px;">
+        </fieldset>
+
+        <select class="form-select text-body-tertiary border-0">
+            <option disabled selected>Chọn loại xe</option>
+            <option value="1">Ô tô</option>
+            <option value="2">Xe máy</option>
+            <option value="3">Xe đạp</option>
+        </select>
+        <select class="form-select text-body-tertiary border-0">
+            <option disabled selected>Chọn loại hộp số</option>
+            <option value="1">Số sàn</option>
+            <option value="2">Số tự động</option>
+        </select>
+        <select class="form-select text-body-tertiary border-0">
+            <option disabled selected>Chọn hãng xe</option>
+            <option value="1">Audi</option>
+            <option value="2">BMW</option>
+            <option value="3">Honda</option>
+        </select>
+        <select class="form-select text-body-tertiary border-0">
+            <option disabled selected>Chọn tỉnh</option>
+            <option value="1">TP. Hồ Chí Minh</option>
+            <option value="2">Hà Nội</option>
+            <option value="3">Nha Trang</option>
+        </select>
+        <select class="form-select text-body-tertiary border-0">
+            <option disabled selected>Chọn quận/huyện</option>
+            <option value="1">Thủ Đức</option>
+            <option value="2">Quận 1</option>
+            <option value="3">Quận 9</option>
+        </select>
+        <select class="form-select text-body-tertiary border-0">
+            <option value="1">Từ thấp đến cao</option>
+            <option value="2">Từ cao đến thấp</option>
+        </select>
+    </div>
+
+    <button type="button" class="btn btn-success d-block m-2">Tìm xe</button>
+</div>
+<div id="mycontent" class="pt-6 pt-xl-6">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-3 col-md-4 text-body p-2">
+                <a href="./detail.html" class="text-decoration-none text-body">
+                    <div class="border rounded-5 text-decoration-none bg-body p-3 h-100">
+                        <img class="img-fluid rounded-4 my-2" src="~/Content/assets/img/NAck_WBdKcVY88Th9rGAIQ.jpg" alt="">
+                        <span class="fs-7 bg-primary-subtle p-1 rounded-5">Số tự động</span>
+                        <h6 class="text-uppercase fw-bold mt-3">Honda civic 2022</h6>
+                        <div class="fs-7"><i class="fa-solid fa-star text-warning"></i>5.0</div>
+                        <div class="fs-7 pt-1 fw-bold text-body-tertiary"><i class="fa-solid fa-location-dot mx-1 text-body"></i>Quận Thủ Đức, Hồ Chí Minh</div>
+                        <hr class="my-3">
+                        <div class="row">
+                            <div class="col-lg-6 d-flex align-items-center">
+                                <div class="fs-5 fw-bold text-success">1160k<span class="fs-6 fw-normal text-secondary">/ngày</span></div>
+                            </div>
+                            <div class="col-lg-6">
+                                <button type="button" class="btn btn-success w-100 p-2">Chọn xe</button>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-lg-3 col-md-4 text-body p-2">
+                <a href="#" class="text-decoration-none text-body">
+                    <div class="border rounded-5 text-decoration-none bg-body p-3 h-100">
+                        <img class="img-fluid rounded-4 my-2" src="~/Content/assets/img/NAck_WBdKcVY88Th9rGAIQ.jpg" alt="">
+                        <span class="fs-7 bg-primary-subtle p-1 rounded-5">Số tự động</span>
+                        <h6 class="text-uppercase fw-bold mt-3">Honda civic 2022</h6>
+                        <div class="fs-7"><i class="fa-solid fa-star text-warning"></i>5.0</div>
+                        <div class="fs-7 pt-1 fw-bold text-body-tertiary"><i class="fa-solid fa-location-dot mx-1 text-body"></i>Quận Thủ Đức, Hồ Chí Minh</div>
+                        <hr class="my-3">
+                        <div class="row">
+                            <div class="col-lg-6 d-flex align-items-center">
+                                <div class="fs-5 fw-bold text-success">1160k<span class="fs-6 fw-normal text-secondary">/ngày</span></div>
+                            </div>
+                            <div class="col-lg-6">
+                                <button type="button" class="btn btn-success w-100 p-2">Chọn xe</button>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-lg-3 col-md-4 text-body p-2">
+                <a href="#" class="text-decoration-none text-body">
+                    <div class="border rounded-5 text-decoration-none bg-body p-3 h-100">
+                        <img class="img-fluid rounded-4 my-2" src="~/Content/assets/img/NAck_WBdKcVY88Th9rGAIQ.jpg" alt="">
+                        <span class="fs-7 bg-primary-subtle p-1 rounded-5">Số tự động</span>
+                        <h6 class="text-uppercase fw-bold mt-3">Honda civic 2022</h6>
+                        <div class="fs-7"><i class="fa-solid fa-star text-warning"></i>5.0</div>
+                        <div class="fs-7 pt-1 fw-bold text-body-tertiary"><i class="fa-solid fa-location-dot mx-1 text-body"></i>Quận Thủ Đức, Hồ Chí Minh</div>
+                        <hr class="my-3">
+                        <div class="row">
+                            <div class="col-lg-6 d-flex align-items-center">
+                                <div class="fs-5 fw-bold text-success">1160k<span class="fs-6 fw-normal text-secondary">/ngày</span></div>
+                            </div>
+                            <div class="col-lg-6">
+                                <button type="button" class="btn btn-success w-100 p-2">Chọn xe</button>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            <div class="col-lg-3 col-md-4 text-body p-2">
+                <a href="#" class="text-decoration-none text-body">
+                    <div class="border rounded-5 text-decoration-none bg-body p-3 h-100">
+                        <img class="img-fluid rounded-4 my-2" src="~/Content/assets/img/NAck_WBdKcVY88Th9rGAIQ.jpg" alt="">
+                        <span class="fs-7 bg-primary-subtle p-1 rounded-5">Số tự động</span>
+                        <h6 class="text-uppercase fw-bold mt-3">Honda civic 2022</h6>
+                        <div class="fs-7"><i class="fa-solid fa-star text-warning"></i>5.0</div>
+                        <div class="fs-7 pt-1 fw-bold text-body-tertiary"><i class="fa-solid fa-location-dot mx-1 text-body"></i>Quận Thủ Đức, Hồ Chí Minh</div>
+                        <hr class="my-3">
+                        <div class="row">
+                            <div class="col-lg-6 d-flex align-items-center">
+                                <div class="fs-5 fw-bold text-success">1160k<span class="fs-6 fw-normal text-secondary">/ngày</span></div>
+                            </div>
+                            <div class="col-lg-6">
+                                <button type="button" class="btn btn-success w-100 p-2">Chọn xe</button>
+                            </div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        </div>
+        <div class="d-flex justify-content-center pt-5">
+            <nav>
+                <ul class="pagination">
+                    <li class="page-item">
+                        <a class="page-link" href="#" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+                    <li class="page-item"><a class="page-link" href="#">1</a></li>
+                    <li class="page-item"><a class="page-link" href="#">2</a></li>
+                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                    <li class="page-item">
+                        <a class="page-link" href="#" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <script src="~/Content/assets/js/search.js"></script>
+}

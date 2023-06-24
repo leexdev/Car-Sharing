@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="ab3a28ec5c7342399ddc05a8ceb586d6" Name="Diagram1">
+        <EntityTypeShape EntityType="CarSharingDBModel.Booking" Width="1.5" PointX="3" PointY="6.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="CarSharingDBModel.District" Width="1.5" PointX="0.75" PointY="2.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CarSharingDBModel.Province" Width="1.5" PointX="1.5" PointY="10.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="CarSharingDBModel.Review" Width="1.5" PointX="6" PointY="6.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="CarSharingDBModel.User" Width="1.5" PointX="0.75" PointY="6.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="CarSharingDBModel.Vehicle" Width="1.5" PointX="3" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="CarSharingDBModel.VehicleBrand" Width="1.5" PointX="0.75" PointY="13.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="CarSharingDBModel.VehicleType" Width="1.5" PointX="1.5" PointY="16.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="CarSharingDBModel.VehicleVariant" Width="1.5" PointX="0.75" PointY="19.375" IsExpanded="true" />
+        <AssociationConnector Association="CarSharingDBModel.FK__Booking__UserId__778AC167" ManuallyRouted="false" />
+        <AssociationConnector Association="CarSharingDBModel.FK__Booking__Vehicle__787EE5A0" ManuallyRouted="false" />
+        <AssociationConnector Association="CarSharingDBModel.FK__District__provin__5DCAEF64" ManuallyRouted="false" />
+        <AssociationConnector Association="CarSharingDBModel.FK__Vehicle__CodeDis__72C60C4A" ManuallyRouted="false" />
+        <AssociationConnector Association="CarSharingDBModel.FK__Review__UserId__7E37BEF6" ManuallyRouted="false" />
+        <AssociationConnector Association="CarSharingDBModel.FK__Review__VehicleI__7F2BE32F" ManuallyRouted="false" />
+        <AssociationConnector Association="CarSharingDBModel.FK__Vehicle__UserId__6FE99F9F" ManuallyRouted="false" />
+        <AssociationConnector Association="CarSharingDBModel.FK__Vehicle__BrandId__70DDC3D8" ManuallyRouted="false" />
+        <AssociationConnector Association="CarSharingDBModel.FK__Vehicle__Variant__71D1E811" ManuallyRouted="false" />
+        <AssociationConnector Association="CarSharingDBModel.FK__VehicleBr__Vehic__66603565" ManuallyRouted="false" />
+        <AssociationConnector Association="CarSharingDBModel.FK__VehicleVa__Vehic__6B24EA82" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

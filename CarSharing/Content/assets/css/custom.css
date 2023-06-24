@@ -1,0 +1,71 @@
+* {
+    font-family: 'Roboto', sans-serif;
+    letter-spacing: 1px;
+}
+
+#slider {
+    background-image: url('Content/assets/img/pexels-craig-adderley-1563356.jpg');
+    background-size: cover;
+    background-position: center;
+    border-radius: 20px;
+    height: 700px;
+}
+
+.my-10 {
+    margin-top: 10rem !important;
+    margin-bottom: 10rem !important;
+}
+
+.translate-50 {
+    transform: translate(-50%, -50%);
+}
+
+.a-hover:hover {
+    text-decoration: underline !important;
+    cursor: pointer;
+}
+
+#input-search::placeholder {
+    color: var(--bs-tertiary-color);
+}
+
+.form-select:focus {
+    box-shadow: none;
+}
+
+/*.img-vehicle {
+    display: block;
+    flex: 0 0 auto;z
+    margin: auto 0;
+    width: 210px;
+}*/
+
+.img-sm-vehicle, .img-vehicle {
+    width: 100%;
+    height: 400px;
+}
+
+@media (min-width: 768px) {
+    .img-md-vehicle, .img-sm-vehicle, .img-vehicle {
+        width: 100%;
+        height: 150px;
+    }
+}
+
+@media (min-width: 992px) {
+    .img-lg-vehicle, .img-md-vehicle, .img-sm-vehicle, .img-vehicle {
+        width: 100%;
+        height: 200px;
+    }
+}
+
+.bg-page-sub {
+    background-image: url(/Content/assets/img/about.b5988b9a0d344ef12143.jpg);
+    background-position: 50% center;
+    background-size: cover;
+    color: rgb(255, 255, 255);
+    height: 100%;
+    padding: 30px 20px;
+    text-transform: uppercase;
+    width: 100%;
+}

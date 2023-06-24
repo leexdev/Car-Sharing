@@ -1,0 +1,150 @@
+﻿@model CarSharing.Models.VehicleManagementModel
+@using CarSharing.Helpers
+@using CarSharing.Controllers
+@{
+    ViewBag.Title = Model.Vehicle.VehicleName;
+    float rating = 0;
+    foreach (var item in Model.ListReviews)
+    {
+        rating += item.Rating;
+    }
+
+}
+
+<div id="mycontent" class="pt-6 pb-5 pb-lg-0" onload="updateEndDate()">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 col-lg-8">
+                <div class="row">
+                    <div class="col-12 col-lg-6 d-flex justify-content-center d-lg-block">
+                        <img class="img-fluid" src="@Model.Vehicle.ImageVehicle" alt="">
+                    </div>
+                    <div class="col-12 col-lg-6 text-center mt-3 text-lg-start mt-lg-0">
+                        <h4 class="text-uppercase fw-bold mb-3">@Model.Vehicle.VehicleName</h4>
+                        <span class="fs-6 bg-primary-subtle p-2 rounded-5">@Model.Vehicle.VehicleVariant.VariantName</span>
+                        <div class="fs-5">
+                            @if (Model.Vehicle.Reviews.Count > 0)
+                            {
+                                <div><i class="fa-solid fa-star text-warning mt-3"></i>@((rating / Model.ListReviews.Count).ToString("0.0")) </div>;
+                            }
+                            else
+                            {
+                                <div class="fs-6 mt-3">Chưa có đánh giá</div>
+                            }
+                        </div>
+                        <div class="fs-6 pt-1 fw-bold text-body-tertiary"><i class="fa-solid fa-location-dot mx-1 text-body"></i>@Model.Vehicle.District.name, @Model.Vehicle.District.Province.Name</div>
+                    </div>
+                    <div class="col-lg-12 my-4">
+                        <h3 class="fw-bold fs-5">Năm sản xuất</h3>
+                        <div>@Model.Vehicle.Year</div>
+                    </div>
+                    <div class="col-lg-12 mb-4">
+                        <h3 class="fw-bold fs-5">Biển số xe</h3>
+                        <div>@Model.Vehicle.RegistrationNumber</div>
+                    </div>
+                    <div class="col-lg-12 mb-4">
+                        <h3 class="fw-bold fs-5">Thông tin chi tiết</h3>
+                        <div>@Model.Vehicle.Content</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 col-lg-4">
+                <div class="mb-2 mb-lg-5">
+                    <div class="fw-bold text-uppercase">Thời gian thuê</div>
+                    <hr class="mt-1 mb-3">
+                    <div class="row">
+                        <div class="col-lg-6">
+                            <span class="fw-lighter">Ngày nhận xe</span>
+                            <fieldset>
+                                <input class="text-center border w-100" type="datetime-local" id="dateTimePickerStart" name="dateTimePicker" onchange="updateEndDate()" style="height: 36px;">
+                            </fieldset>
+                        </div>
+                        <div class="col-lg-6">
+                            <span class="fw-lighter">Ngày trả xe</span>
+                            <fieldset>
+                                <input class="text-center border w-100" type="datetime-local" id="dateTimePickerEnd" name="dateTimePicker" onchange="updateEndDate()" style="height: 36px;">
+                            </fieldset>
+                        </div>
+                    </div>
+                </div>
+                <div class="mb-2">
+                    <div class="fw-bold text-uppercase">Chi tiết giá</div>
+                    <hr class="mt-1 mb-3">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="float-start">Đơn giá</div>
+                            <div class="float-end" id="price">@(Math.Round(Model.Vehicle.VehiclePrice).ToString("N0"))</div>
+                        </div>
+                        <div class="col-lg-12">
+                            <div class="float-start">Thời gian thuê</div>
+                            <div class="float-end" id="totalDays"></div>
+                        </div>
+                        <div class="col-lg-12">
+                            <hr class="mt-1">
+                        </div>
+                        <div class="col-lg-12">
+                            <div class="float-start">Tổng</div>
+                            <div class="float-end" id="totalPrice"></div>
+                        </div>
+                    </div>
+                </div>
+                <a href="./pay.html">
+                    <button type="button" class="btn btn-success w-100">Đặt xe</button>
+                </a>
+            </div>
+            <div class="col-lg-8">
+                @if (Model.ListReviews.Count == 0)
+                {
+                    <div class="fs-6 mt-4 mt-md-0 mb-md-5">Chưa có đánh giá</div>
+                }
+                else
+                {
+                    <div class="fs-6"><i class="fa-solid fa-star text-warning my-3"></i>@(Model.Vehicle.Reviews.Count > 0 ? (rating / (double)Model.Vehicle.Reviews.Count).ToString("0.0") : "0.0") &#8226; @Model.Vehicle.Reviews.Count đánh giá</div>
+                }
+                <div class="list-review">
+                    <div class="item-review">
+                        @foreach (var item in Model.ListReviews)
+                        {
+                            <div class="profile p-4 border border-1 rounded-3 mb-2">
+                                <div class="row">
+                                    <div class="col-3 col-lg-2">
+                                        <img class="img-fluid ms-4" src="~/Content/assets/img/defaultuser.png" alt="avatar.jpg" style="width: 78px; height: 78px; border-radius: 100%;">
+                                    </div>
+                                    <div class="col-7 col-lg-8">
+                                        <div class="info">
+                                            <div class="name fw-bold">@item.User.FullName</div>
+                                        </div>
+                                        <div class="stars mt-n">
+                                            @for (int i = 1; i <= 5; i++)
+                                            {
+                                                <i class="@(i <= item.Rating ? "fa-solid fa-star text-warning mt-3" : "fa-regular fa-star text-warning mt-3")"></i>
+                                            }
+                                        </div>
+                                        <div class="review py-2">
+                                            @item.Comment
+                                        </div>
+                                    </div>
+                                    <div class="col-2">
+                                        <div>@TimeHelper.FormatTimeAgo(item.PushlishDate)</div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </div>
+                @if(Model.ListReviews.Count > 3)
+                {
+                    <div class="d-flex justify-content-center my-3">
+                        <button type="button" class="btn btn-success">Xem thêm</button>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <script src="~/Content/assets/js/detail.js"></script>
+}
+

@@ -1,0 +1,221 @@
+﻿@model CarSharing.Models.VehicleManagementModel
+@using CarSharing.Helpers
+@using CarSharing.Controllers
+
+
+@{
+    var isVehicleTypeActive = ViewContext.RouteData.Values["controller"].ToString() == "VehicleType" && ViewContext.RouteData.Values["action"].ToString() == "Index";
+    var isVehicleVariantActive = ViewContext.RouteData.Values["controller"].ToString() == "VehicleType" && ViewContext.RouteData.Values["action"].ToString() == "Variant";
+    var isVehicleBrandActive = ViewContext.RouteData.Values["controller"].ToString() == "VehicleType" && ViewContext.RouteData.Values["action"].ToString() == "Brand";
+    var isVehicleActive = ViewContext.RouteData.Values["controller"].ToString() == "Vehicle" && ViewContext.RouteData.Values["action"].ToString() == "Index";
+    var isUserActive = ViewContext.RouteData.Values["controller"].ToString() == "User" && ViewContext.RouteData.Values["action"].ToString() == "Index";
+    string actionCurrent = ViewBag.ActionCurrent;
+    string controllerCurrent = ViewBag.ControllerCurrent;
+}
+
+@if (Session["SuccessMessage"] != null)
+{
+    var successMessage = Session["SuccessMessage"] as string;
+    Session.Remove("SuccessMessage");
+    <script>
+        var successMessage = "@Html.Raw(successMessage)";
+        alert(successMessage);
+    </script>
+}
+
+<!doctype html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1, maximum-scale=1">
+    <title>Admin Dashboard</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="~/Areas/Admin/Content/css/bootstrap.min.css">
+    <!----css3---->
+    <link rel="stylesheet" href="~/Areas/Admin/Content/css/custom.css">
+
+    <!--google fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+
+    <!--google material icon-->
+    <link href="https://fonts.googleapis.com/css2?family=Material+Icons" rel="stylesheet">
+
+</head>
+<body>
+
+
+
+    <div class="wrapper">
+
+        <div class="body-overlay"></div>
+
+        <!-------sidebar--design------------>
+
+        <div id="sidebar">
+            <div class="sidebar-header">
+                <a href="@Url.Action("Index", "Home", new { area = "" })">
+                    <h3>
+                        <span style="font-size: medium;">Admin Dashboard</span>
+                    </h3>
+                </a>
+            </div>
+            <ul class="list-unstyled component m-0">
+                <li class="dropdown">
+                    <a href="#category" data-toggle="collapse" aria-expanded="true" class="dropdown-toggle">
+                        <i class="material-icons">grid_on</i>Danh mục
+                    </a>
+                    <ul class="collapse list-unstyled menu show" id="category">
+                        <li class="@(isVehicleActive ? "active" : "")">
+                            <a href="@Url.Action("Index", "Vehicle")">Quản lý xe</a>
+                        </li>
+                        <li>
+                            <a href="#vehicleType" data-toggle="collapse" aria-expanded="true" class="dropdown-toggle">Quản lý loại xe</a>
+                            <ul class="collapse list-unstyled menu bg-body-secondary" id="vehicleType">
+                                <li class="@(isVehicleTypeActive ? "active" : "")">
+                                    <a href="@Url.Action("Index", "VehicleType")">Loại xe</a>
+                                </li>
+                                <li class="@(isVehicleVariantActive ? "active" : "")">
+                                    <a href="@Url.Action("Variant", "VehicleType")">Loại hộp số</a>
+                                </li>
+                                <li class="@(isUserActive ? "active" : "")">
+                                    <a href="@Url.Action("Brand", "VehicleType")">Thương hiệu</a>
+                                </li>
+                                <!-- Các menu khác -->
+                            </ul>
+                        </li>
+                        <li class="@(isUserActive ? "active" : "")">
+                            <a href="@Url.Action("Index", "User")">Quản lý người dùng</a>
+                        </li>
+                        <!-- Các menu khác -->
+                    </ul>
+                </li>
+            </ul>
+        </div>
+
+
+        <!-------sidebar--design- close----------->
+        <!-------page-content start----------->
+
+        <div id="content">
+
+            <!------top-navbar-start----------->
+
+            <div class="top-navbar">
+                <div class="xd-topbar">
+                    <div class="row">
+                        <div class="col-2 col-md-1 col-lg-1 order-2 order-md-1 align-self-center">
+                            <div class="xp-menubar">
+                                <span class="material-icons text-white">signal_cellular_alt</span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-5 col-lg-3 order-3 order-md-2">
+                            <div class="xp-searchbar">
+                                @using (Html.BeginForm(actionCurrent, controllerCurrent, FormMethod.Get))
+                                {
+                                    <div class="input-group">
+                                        @Html.TextBox("SearchString", null, new { @class = "form-control", placeholder = "Tìm kiếm" })
+                                        <div class="input-group-append">
+                                            <button class="btn" type="submit" id="button-addon2">
+                                                Tìm kiếm
+                                            </button>
+                                        </div>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+
+                        <div class="col-10 col-md-6 col-lg-8 order-1 order-md-3">
+                            <div class="xp-profilebar text-right">
+                                <nav class="navbar p-0">
+                                    <ul class="nav navbar-nav flex-row ml-auto">
+
+                                        <li class="dropdown nav-item">
+                                            <a class="nav-link" href="#" data-toggle="dropdown">
+                                                <img src="~/Content/assets/img/@Session["Avatar"]" style="width:40px; border-radius:50%;" />
+                                                <span class="xp-user-live"></span>
+                                            </a>
+                                            <ul class="dropdown-menu small-menu">
+                                                <li>
+                                                    <a href="@Url.Action("User", "Home", new {area = ""})">
+                                                        <span class="material-icons">person_outline</span>
+                                                        Thông tin cá nhân
+                                                    </a>
+                                                </li>
+                                                <li>
+                                                    <a href="@Url.Action("Index", "Home", new {area = ""})">
+                                                        <span class="material-icons">logout</span>
+                                                        Đăng xuất
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </nav>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="xp-breadcrumbbar text-center">
+                        <h4 class="page-title">Dashboard</h4>
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item"><a href="#">Admin</a></li>
+                            <li class="breadcrumb-item active" aria-curent="page">Dashboard</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+            <!------top-navbar-end----------->
+            @RenderBody()
+            <!----footer-design------------->
+
+            <footer class="footer">
+                <div class="container-fluid">
+                    <div class="footer-in">
+                        <p class="mb-0">&copy 2023 Ketnoixe . All Rights Reserved.</p>
+                    </div>
+                </div>
+            </footer>
+        </div>
+
+    </div>
+
+
+
+    <!-------complete html----------->
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="~/Areas/Admin/Content/js/jquery-3.3.1.slim.min.js"></script>
+    <script src="~/Areas/Admin/Content/js/popper.min.js"></script>
+    <script src="~/Areas/Admin/Content/js/bootstrap.min.js"></script>
+    <script src="~/Areas/Admin/Content/js/jquery-3.3.1.min.js"></script>
+
+    <script src="~/Content/plugin/ckeditor/ckeditor.js"></script>
+    @RenderSection("scripts", false);
+
+
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $(".xp-menubar").on('click', function () {
+                $("#sidebar").toggleClass('active');
+                $("#content").toggleClass('active');
+            });
+
+            $('.xp-menubar,.body-overlay').on('click', function () {
+                $("#sidebar,.body-overlay").toggleClass('show-nav');
+            });
+
+        });
+    </script>
+</body>
+
+</html>
+
+

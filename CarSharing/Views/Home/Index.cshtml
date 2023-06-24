@@ -1,0 +1,260 @@
+﻿@model CarSharing.Models.VehicleManagementModel
+@using CarSharing.Controllers
+@{
+    ViewBag.Title = "Ketnoixe - Nền tảng chia sẻ xe thông minh";
+}
+<div id="mycontent" style="margin-top: 82px;">
+    <div id="slider" class="container mb-5">
+        <div class="row">
+            <div class="col-lg-7 col-0">
+
+            </div>
+            <div class="col-lg-4 bg-body-tertiary pb-5 rounded-3 my-10">
+                <div class="row bg-body-tertiary">
+                    <span class="text-center fw-lighter mt-4 fs-7">Hơn @Model.ListVehicles.Count+ xe đang được cho thuê</span>
+                    <h3 class="text-center fw-bold pt-3 pb-4">Bạn cần thuê xe?</h3>
+                    <div class="col-lg-6">
+                        <div class="input-group">
+                            <select class="form-select" id="inputGroupVehicleType">
+                                @foreach (var item in Model.ListVehicleTypes)
+                                {
+                                    <option value="@item.VehicleTypeId">@item.VehicleTypeName</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 mt-2 mt-lg-0">
+                        <div class="input-group">
+                            <select class="form-select" id="inputGroupProvinces">
+                                @foreach (var item in Model.ListProvinces)
+                                {
+                                    <option value="@item.Code">@item.Name</option>
+                                }
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 mt-2">
+                        <span class="fw-lighter">Ngày nhận xe</span>
+                        <fieldset>
+                            <input class="text-center border w-100" type="datetime-local" id="dateTimePickerStart" name="dateTimePicker" onchange="updateEndDate()">
+                        </fieldset>
+                    </div>
+                    <div class="col-lg-6 mt-2">
+                        <span class="fw-lighter">Ngày trả xe</span>
+                        <fieldset>
+                            <input class="text-center border w-100" type="datetime-local" id="dateTimePickerEnd" name="dateTimePicker" onchange="updateEndDate()">
+                        </fieldset>
+                    </div>
+                    <div class="col-lg-12 mt-2">
+                        <a href="@Url.Action("Index", "Search")">
+                            <button type="button" class="btn btn-success w-100 my-2 py-2">Tìm xe giá tốt</button>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-1">
+
+            </div>
+        </div>
+    </div>
+
+    <div id="car-introduction" class="py-5 bg-body-tertiary d-none d-md-block">
+        <h4 class="text-center fs-1 fw-bold mb-4">Xe Dành Cho Bạn</h4>
+        <div class="container">
+            <div class="row mt-3">
+                @foreach(var item in Model.ListVehicles.OrderBy(item => Guid.NewGuid()).Take(8))
+                {
+                    <div class="col-lg-3 col-md-4 text-body p-2">
+                        <a href="@Url.Action("Detail", "Vehicle", new { id = item.VehicleId })" class="text-decoration-none text-body">
+                            <div class="border rounded-5 text-decoration-none bg-body p-3 h-100">
+                                <img class="img-lg-vehicle img-md-vehicle rounded-4 my-2" src="@item.ImageVehicle" alt="">
+                                <span class="fs-7 bg-primary-subtle p-1 rounded-5">@item.VehicleVariant.VariantName</span>
+                                <h6 class="text-uppercase fw-bold mt-3">@item.VehicleName</h6>
+                                @if (item.Reviews.Count == 0)
+                                {
+                                    <div class="fs-7">Chưa có đánh giá</div>
+
+                                }
+                                else
+                                {
+                                    <div class="fs-7"><i class="fa-solid fa-star text-warning"></i>@((ViewBag.RatingsByVehicleId[item.VehicleId] / (double)item.Reviews.Count).ToString("0.0"))</div>
+                                }
+                                <hr class="my-3">
+                                <div class="row my-2">
+                                    <div class="col-sm-9">
+                                        <div class="fs-7 pt-1 fw-bold text-body-tertiary"><i class="fa-solid fa-location-dot mx-1 text-body"></i>@item.District.name, @item.District.Province.Name</div>
+                                    </div>
+                                    <div class="col-sm-3 p-0">
+                                        <div class="fs-6 fw-bold text-success ms-lg-3 ms-sm-0 ms-md-0">@(Math.Round(item.VehiclePrice / 1000, 0).ToString("0") + "k")</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+
+    <div id="car-introductionSmall" class="py-5 d-block d-md-none">
+        <h4 class="text-center fs-1 fw-bold">Xe Dành Cho Bạn</h4>
+        <div class="container">
+            <div id="carouselCarIntroduction" class="carousel slide">
+                <div class="carousel-inner py-4">
+                @foreach(var item in Model.ListVehicles.OrderBy(item => Guid.NewGuid()).Take(8))
+                {
+                    <div class="carousel-item active">
+                        <div class="position-relative">
+                            <a href="@Url.Action("Detail", "Vehicle", new { id = item.VehicleId })" class="text-decoration-none text-body">
+                                <div class="border rounded-5 text-decoration-none bg-body p-3 h-100">
+                                    <img class="img-md-vehicle img-vehicle rounded-4 my-2" src="@Url.Content(item.ImageVehicle)" alt="@item.VehicleName">
+                                    <span class="fs-7 bg-primary-subtle p-1 rounded-5">@item.VehicleVariant.VariantName</span>
+                                    <h6 class="text-uppercase fw-bold mt-3">@item.VehicleName</h6>
+                                    @if (item.Reviews.Count == 0)
+                                    {
+                                        <div class="fs-7">Chưa có đánh giá</div>
+                                    }
+                                    else
+                                    {
+                                        <div class="fs-7"><i class="fa-solid fa-star text-warning"></i>@((ViewBag.RatingsByVehicleId[item.VehicleId] / (double)item.Reviews.Count).ToString("0.0"))</div>
+                                    }
+                                    <hr class="my-3">
+                                    <div class="row my-2">
+                                        <div class="col-10">
+                                            <div class="fs-7 pt-1 fw-bold text-body-tertiary"><i class="fa-solid fa-location-dot mx-1 text-body"></i>@item.District.name, @item.District.Province.Name</div>
+                                        </div>
+                                        <div class="col-2 p-0">
+                                            <div class="fs-6 fw-bold text-success ms-lg-3 ms-sm-0 ms-md-0">@(Math.Round(item.VehiclePrice / 1000, 0).ToString("0") + "k")</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                }
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#carouselCarIntroduction" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carouselCarIntroduction" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="place-introduction" class="py-5">
+        <h4 class="text-center fs-1 fw-bold">Địa Điểm Nổi Bật</h4>
+        <div class="container">
+            <div id="carouselPlaceIntroduction" class="carousel slide">
+                <div class="carousel-inner py-4">
+                    <div class="carousel-item active">
+                        <a href="#">
+                            <div class="position-relative">
+                                <img src="~/Content/assets/img/saigon.jpg" class="d-block w-100 rounded-5 img-fluid" alt="saigon.jpg">
+                                <h4 class="position-absolute translate-50 text-white top-50 start-50 fw-bold fs-1">Sài Gòn</h4>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="carousel-item">
+                        <a href="#">
+                            <div class="position-relative">
+                                <img src="~/Content/assets/img/vungtau.jpg" class="d-block w-100 rounded-5 img-fluid" alt="vungtau.jpg">
+                                <h4 class="position-absolute translate-50 text-white top-50 start-50 fw-bold fs-1">Vũng Tàu</h4>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="carousel-item">
+                        <a href="#">
+                            <div class="position-relative">
+                                <img src="~/Content/assets/img/binhduong.jpg" class="d-block w-100 rounded-5 img-fluid" alt="binhduong.jpg">
+                                <h4 class="position-absolute translate-50 text-white top-50 start-50 fw-bold fs-1">Bình Dương</h4>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#carouselPlaceIntroduction" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carouselPlaceIntroduction" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
+            </div>
+        </div>
+    </div>
+    <div id="blog-introduction" class="py-5 bg-body-tertiary d-none d-lg-block">
+        <h4 class="text-center fs-1 fw-bold">Blog</h4>
+        <div class="container">
+            <div class="row py-4">
+                <div class="col-lg-4">
+                    <a href="#">
+                        <div class="position-relative py-2">
+                            <img src="~/Content/assets/img/RaJDNmXOsnc0NfWqqCXZWA.jpg" class="d-block w-100 rounded-4 img-fluid " alt="">
+                            <h4 class="position-absolute text-white fw-bold fs-5 text-uppercase px-3 w-100" style="bottom: 10%">Du lịch 3 miền cùng KETNOIXE <br><span class="fw-normal fs-6">29/03/2023</span></h4>
+                        </div>
+                    </a>
+                    <a href="#">
+                        <div class="position-relative py-2">
+                            <img src="~/Content/assets/img/RaJDNmXOsnc0NfWqqCXZWA.jpg" class="d-block w-100 rounded-4 img-fluid " alt="">
+                            <h4 class="position-absolute text-white fw-bold fs-5 text-uppercase px-3 w-100" style="bottom: 10%">Du lịch 3 miền cùng KETNOIXE <br><span class="fw-normal fs-6">29/03/2023</span></h4>
+                        </div>
+                    </a>
+                </div>
+                <div class="col-lg-8">
+                    <a href="#">
+                        <div class="position-relative py-2">
+                            <img src="~/Content/assets/img/RaJDNmXOsnc0NfWqqCXZWA.jpg" class="d-block w-100 rounded-4 img-fluid " alt="">
+                            <h4 class="position-absolute text-white fw-bold fs-5 text-uppercase px-3 w-100" style="bottom: 5%">Du lịch 3 miền cùng KETNOIXE <br><span class="fw-normal fs-6">29/03/2023</span></h4>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="blog-introductionSmall" class="py-5 bg-body-tertiary d-lg-none">
+        <h4 class="text-center fs-1 fw-bold">Blog</h4>
+        <div class="container">
+            <div id="carouselBlogIntroduction" class="carousel slide">
+                <div class="carousel-inner py-4">
+                    <div class="carousel-item active">
+                        <a href="#">
+                            <div class="position-relative">
+                                <img src="~/Content/assets/img/RaJDNmXOsnc0NfWqqCXZWA.jpg" class="d-block w-100 rounded-5 img-fluid " alt="">
+                                <h4 class="position-absolute text-white fw-bold fs-5 text-uppercase px-3 w-100" style="bottom: 10%">Du lịch 3 miền cùng KETNOIXE <br><span class="fw-normal fs-6">29/03/2023</span></h4>
+                            </div>
+                        </a>
+                    </div>
+                    <div class="carousel-item">
+                        <div class="position-relative">
+                            <img src="~/Content/assets/img/RaJDNmXOsnc0NfWqqCXZWA.jpg" class="d-block w-100 rounded-5 img-fluid " alt="">
+                            <h4 class="position-absolute text-white fw-bold fs-5 text-uppercase px-3 w-100" style="bottom: 10%">Du lịch 3 miền cùng KETNOIXE <br><span class="fw-normal fs-6">29/03/2023</span></h4>
+                        </div>
+                    </div>
+                    <div class="carousel-item">
+                        <div class="position-relative">
+                            <img src="~/Content/assets/img/RaJDNmXOsnc0NfWqqCXZWA.jpg" class="d-block w-100 rounded-5 img-fluid " alt="">
+                            <h4 class="position-absolute text-white fw-bold fs-5 text-uppercase px-3 w-100" style="bottom: 10%">Du lịch 3 miền cùng KETNOIXE <br><span class="fw-normal fs-6">29/03/2023</span></h4>
+                        </div>
+                    </div>
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#carouselBlogIntroduction" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#carouselBlogIntroduction" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <script src="~/Content/assets/js/index.js"></script>
+}
