@@ -42,33 +42,27 @@ namespace CarSharing.Areas.Admin.Controllers
             {
                 objVehicleModel.ListVehicles = vehicleService.GetVehiclesSearch(searchString).ToList();
             }
-            else
-            {
-                objVehicleModel.ListVehicles = vehicleService.GetVehicles().ToList();
-            }
 
             ViewBag.CurrentFilter = searchString;
             int pageSize = 5;
             int pageNumber = page ?? 1;
-            var pagedArticles = objVehicleModel.ListVehicles.ToPagedList(pageNumber, pageSize);
-            var pagedArticleModels = new StaticPagedList<VehicleManagementModel>(
-                pagedArticles.Select(a => new VehicleManagementModel
+            var pagedVehicles = objVehicleModel.ListVehicles.ToPagedList(pageNumber, pageSize);
+            var pagedVehiclModels = new StaticPagedList<VehicleManagementModel>(
+                pagedVehicles.Select(a => new VehicleManagementModel
                 {
                     ListVehicles = new List<Vehicle> { a }
                 }),
-                pagedArticles.GetMetaData()
+                pagedVehicles.GetMetaData()
             );
-            objVehicleModel.PagedVehicles = pagedArticleModels;
+            objVehicleModel.PagedVehicles = pagedVehiclModels;
             objVehicleModel.ListProvinces = await _apiService.GetProvincesAsync();
             return View(objVehicleModel);
         }
 
         public JsonResult GetVariants(Guid vehicleTypeId)
         {
-            // Lấy danh sách variants dựa trên vehicleTypeId
             var variants = vehicleService.GetVariantsByVehicleType(vehicleTypeId);
 
-            // Chỉ lấy các trường cần thiết để truyền về cho dropdownlist
             var variantsData = variants.Select(v => new
             {
                 VariantId = v.VariantId,
@@ -80,10 +74,8 @@ namespace CarSharing.Areas.Admin.Controllers
 
         public JsonResult GetBrands(Guid vehicleTypeId)
         {
-            // Lấy danh sách variants dựa trên vehicleTypeId
             var brands = vehicleService.GetBrandsByVehicleType(vehicleTypeId);
 
-            // Chỉ lấy các trường cần thiết để truyền về cho dropdownlist
             var brandsData = brands.Select(b => new
             {
                 BrandId = b.BrandId,
@@ -107,24 +99,57 @@ namespace CarSharing.Areas.Admin.Controllers
             return Json(districtsData, JsonRequestBehavior.AllowGet);
         }
 
-
-        [HttpGet]
-        public ActionResult Create(Guid id)
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [ValidateInput(false)]
+        public ActionResult Create(Vehicle vehicle, District district, Province province, HttpPostedFileBase ImageUpLoad)
         {
-            var data = vehicleService.GetVehicle(id);
-
-            var model = new VehicleManagementModel
+            if (ModelState.IsValid)
             {
-                Vehicle = data
-            };
+                var existingProvince = vehicleService.GetProvinceByCode(province.Code);
+                var existingDistrict = vehicleService.GetDistrictByCode(district.code);
 
-            return View(model);
+                if (existingProvince == null)
+                {
+                    vehicleService.AddProvince(province);
+                }
+                else
+                {
+                    province = existingProvince;
+                }
+
+                if (existingDistrict == null)
+                {
+                    district.province_code = province.Code;
+                    vehicleService.AddDistrict(district);
+                }
+                else
+                {
+                    district = existingDistrict;
+                }
+
+                vehicle.VehicleId = Guid.NewGuid();
+                vehicle.CodeDistrict = district.code;
+                string fileName = Path.GetFileNameWithoutExtension(ImageUpLoad.FileName);
+                string extension = Path.GetExtension(ImageUpLoad.FileName);
+                fileName = fileName + "_" + long.Parse(DateTime.Now.ToString("yyyyMMddhhmmss")) + extension;
+                vehicle.ImageVehicle = "/Content/assets/img/" + fileName;
+                ImageUpLoad.SaveAs(Path.Combine(Server.MapPath("~/Content/assets/img/"), fileName));
+                string userIdString = "F5FC5234-9824-48B4-87D3-1861DF176627";
+                vehicle.UserId = Guid.Parse(userIdString);
+
+                vehicleService.AddVehicle(vehicle);
+                Session["SuccessMessage"] = "Thêm thành công!";
+                return Redirect(Request.UrlReferrer.ToString());
+            }
+            return RedirectToAction("Index");
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         [ValidateInput(false)]
-        public ActionResult Create(Vehicle vehicle, District district, Province province, HttpPostedFileBase ImageUpLoad)
+        //[CustomAuthorize(Roles = "admin")]
+        public ActionResult Edit(Vehicle vehicle, Province province, District district, HttpPostedFileBase ImageUpLoad)
         {
             var existingProvince = vehicleService.GetProvinceByCode(province.Code);
             var existingDistrict = vehicleService.GetDistrictByCode(district.code);
@@ -148,21 +173,53 @@ namespace CarSharing.Areas.Admin.Controllers
                 district = existingDistrict;
             }
 
-            vehicle.VehicleId = Guid.NewGuid();
-            vehicle.CodeDistrict = district.code;
-            string fileName = Path.GetFileNameWithoutExtension(ImageUpLoad.FileName);
-            string extension = Path.GetExtension(ImageUpLoad.FileName);
-            fileName = fileName + "_" + long.Parse(DateTime.Now.ToString("yyyyMMddhhmmss")) + extension;
-            vehicle.ImageVehicle = "/Content/assets/img/" + fileName;
-            ImageUpLoad.SaveAs(Path.Combine(Server.MapPath("~/Content/assets/img/"), fileName));
-            //if (Session["Id"] is Guid authorId)
-            string userIdString = "F5FC5234-9824-48B4-87D3-1861DF176627";
-            vehicle.UserId = Guid.Parse(userIdString);
-
-            vehicleService.AddVehicle(vehicle);
-            Session["SuccessMessage"] = "Thêm thành công!";
+            if (ImageUpLoad != null)
+            {
+                string fileName = Path.GetFileNameWithoutExtension(ImageUpLoad.FileName);
+                string extension = Path.GetExtension(ImageUpLoad.FileName);
+                fileName = fileName + "_" + long.Parse(DateTime.Now.ToString("yyyyMMddhhmmss")) + extension;
+                vehicle.ImageVehicle = "/Content/assets/img/" + fileName;
+                ImageUpLoad.SaveAs(Path.Combine(Server.MapPath("~/Content/assets/img/"), fileName));
+            }
+            else
+            {
+                vehicle.ImageVehicle = vehicle.ImageVehicle;
+            }
+            vehicleService.UpdateVehicle(vehicle, district);
+            Session["SuccessMessage"] = "Cập nhật thành công!";
             return Redirect(Request.UrlReferrer.ToString());
         }
 
+
+        [HttpPost]
+        public ActionResult Delete(Guid id)
+        {
+            var vehicle = vehicleService.GetVehicle(id);
+
+            if (vehicle == null)
+            {
+                return HttpNotFound();
+            }
+
+            vehicleService.DeleteVehicle(vehicle);
+            Session["SuccessMessage"] = "Xóa thành công!";
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        public ActionResult UploadImage(HttpPostedFileBase upload)
+        {
+            if (upload != null && upload.ContentLength > 0)
+            {
+                var fileName = DateTime.Now.ToString("yyyyMMddHHmmss") + "_" + Guid.NewGuid().ToString("N") + Path.GetExtension(upload.FileName);
+                var imagePath = Path.Combine(Server.MapPath("~/Content/assets/img/"), fileName);
+                upload.SaveAs(imagePath);
+
+                var imageUrl = Url.Content("~/Content/assets/img/" + fileName);
+                return Content("<script>window.parent.CKEDITOR.tools.callFunction(" + Request.QueryString["CKEditorFuncNum"] + ", '" + imageUrl + "');</script>");
+            }
+
+            return HttpNotFound();
+        }
     }
 }

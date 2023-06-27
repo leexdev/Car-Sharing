@@ -48,7 +48,6 @@ namespace CarSharing.Service
                     return districts;
                 }
             }
-
             return null;
         }
 

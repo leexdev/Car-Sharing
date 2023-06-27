@@ -11,7 +11,8 @@ namespace CarSharing.Models
 {
     using System;
     using System.Collections.Generic;
-    
+    using System.ComponentModel.DataAnnotations;
+
     public partial class Vehicle
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
@@ -22,11 +23,18 @@ namespace CarSharing.Models
         }
     
         public System.Guid VehicleId { get; set; }
+
+        [Required]
         public string VehicleName { get; set; }
         public string Content { get; set; }
         public System.Guid UserId { get; set; }
+        [Required]
         public System.Guid BrandId { get; set; }
+
+        [Required]
         public System.Guid VariantId { get; set; }
+
+        [Required]
         public string ImageVehicle { get; set; }
         public int Year { get; set; }
         public string RegistrationNumber { get; set; }

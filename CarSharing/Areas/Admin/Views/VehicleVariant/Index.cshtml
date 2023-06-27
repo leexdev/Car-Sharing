@@ -1,0 +1,252 @@
+﻿@using PagedList;
+@using PagedList.Mvc;
+@model CarSharing.Models.VehicleManagementModel
+@using CarSharing.Helpers
+@using CarSharing.Controllers
+
+@{
+    ViewBag.Title = "Quản lý xe";
+    ViewBag.ActionCurrent = "Index";
+    ViewBag.ControllerCurrent = "VehicleVariant";
+    //var pager = Html.PagedListPager(Model.PagedVehicleVariants, page => Url.Action("Index", new { page, currentFilter = ViewBag.CurrentFilter }), PagedListRenderOptions.ClassicPlusFirstAndLast);
+    var pager = Model.PagedVehicleVariants;
+    int totalPages = (int)Math.Ceiling((double)pager.TotalItemCount / pager.PageSize);
+    int maxVisiblePages = 5;
+    int startPage = Math.Max(1, pager.PageNumber - maxVisiblePages / 2);
+    int endPage = Math.Min(startPage + maxVisiblePages - 1, totalPages);
+
+    int itemsPerPage = pager.PageSize;
+
+    if (endPage - startPage + 1 < maxVisiblePages)
+    {
+        startPage = Math.Max(1, endPage - maxVisiblePages + 1);
+    }
+}
+
+<div class="main-content">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="table-wrapper">
+                <div class="table-title">
+                    <div class="row">
+                        <div class="col-sm-6 p-0 flex justify-content-lg-start justify-content-center">
+                            <h2 class="ml-lg-2">Quản lý loại hộp số</h2>
+                        </div>
+                        <div class="col-sm-6 p-0 flex justify-content-lg-end justify-content-center">
+                            <a href="#addVehicleVariantModal" class="btn btn-success" data-toggle="modal">
+                                <i class="material-icons">&#xE147;</i>
+                                <span>Thêm</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <table class="table table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th class="text-center">
+                                @Html.DisplayNameFor(model => model.VehicleVariant.VariantName)
+                            </th>
+                            <th class="text-center">
+                                @Html.DisplayNameFor(model => model.VehicleVariant.VehicleType.VehicleTypeName)
+                            </th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @foreach (var pagedVehicleVariant in Model.PagedVehicleVariants)
+                        {
+                            foreach (var vehicleVariant in pagedVehicleVariant.ListVehicleVariants)
+                            {
+                                <tr>
+                                    <td class="text-center" style="width: 43%">
+                                        @Html.DisplayFor(modelItem => vehicleVariant.VariantName)
+                                    </td>
+                                    <td class="text-center" style="width: 43%">
+                                        @Html.DisplayFor(modelItem => vehicleVariant.VehicleType.VehicleTypeName)
+                                    </td>
+                                    <td class="text-center">
+                                        <div class="d-flex justify-content-center align-items-center">
+                                            <div class="mr-2">
+                                                <a href="#updateVehicleVariantModal" class="edit" data-toggle="modal" data-id="@vehicleVariant.VariantId" data-name="@vehicleVariant.VariantName" data-type="@vehicleVariant.VehicleType.VehicleTypeId">
+                                                    <i class="material-icons" data-toggle="tooltip" title="Sửa">&#xE254;</i>
+                                                </a>
+                                            </div>
+                                            <div>
+                                                <a href="#deleteVehicleVariantModal" class="delete" data-toggle="modal" data-id="@vehicleVariant.VariantId">
+                                                    <i class="material-icons" data-toggle="tooltip" title="Xóa">&#xE872;</i>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+
+                <div class="clearfix">
+                    <div class="hint-text">Hiển thị <b>@Model.PagedVehicleVariants.Count</b> trong số <b>@Model.ListVehicleVariants.Count</b></div>
+                    <ul class="pagination">
+                        @if (pager.HasPreviousPage)
+                        {
+                            <li class="page-item">
+                                <a href="@Url.Action("Index", new { page = 1, currentFilter = ViewBag.CurrentFilter })" class="page-link">Đầu</a>
+                            </li>
+                            <li class="page-item">
+                                <a href="@Url.Action("Index", new { page = pager.PageNumber - 1, currentFilter = ViewBag.CurrentFilter })" class="page-link">Trước</a>
+                            </li>
+                        }
+
+                        @for (int pageNumber = startPage; pageNumber <= endPage; pageNumber++)
+                        {
+                            <li class="page-item @(pager.PageNumber == pageNumber ? "active" : "")">
+                                <a href="@Url.Action("Index", new { page = pageNumber, currentFilter = ViewBag.CurrentFilter })" class="page-link">@pageNumber</a>
+                            </li>
+                        }
+
+                        @if (pager.HasNextPage)
+                        {
+                            <li class="page-item">
+                                <a href="@Url.Action("Index", new { page = pager.PageNumber + 1, currentFilter = ViewBag.CurrentFilter })" class="page-link">Tiếp</a>
+                            </li>
+                            <li class="page-item">
+                                <a href="@Url.Action("Index", new { page = totalPages, currentFilter = ViewBag.CurrentFilter })" class="page-link">Cuối</a>
+                            </li>
+                        }
+                    </ul>
+                </div>
+
+                @using (Html.BeginForm("Create", "VehicleVariant", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                {
+                    @Html.AntiForgeryToken()
+                    <div class="modal fade" tabindex="-1" id="addVehicleVariantModal" role="dialog">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Thêm loại hộp số</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                @Html.LabelFor(model => model.VehicleVariant.VehicleType.VehicleTypeName)
+                                                <select id="VehicleTypeId" name="VehicleVariant.VehicleTypeId" class="form-control mb-3" required="required">
+                                                    <option disabled selected>Chọn loại hộp số</option>
+                                                    @foreach (var vehicleType in Model.ListVehicleTypes)
+                                                    {
+                                                        <option value="@vehicleType.VehicleTypeId">@vehicleType.VehicleTypeName</option>
+                                                    }
+                                                </select>
+                                            </div>
+                                            <div class="col-md-6">
+                                                @Html.LabelFor(model => model.VehicleVariant.VariantName)
+                                                @Html.TextBoxFor(model => model.VehicleVariant.VariantName, new { @class = "form-control mb-3", required = "required" })
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy bỏ</button>
+                                        <input type="submit" value="Thêm" class="btn btn-success">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+
+                @using (Html.BeginForm("Edit", "VehicleVariant", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                {
+                    @Html.AntiForgeryToken()
+                    <div class="modal fade" tabindex="-1" id="updateVehicleVariantModal" role="dialog">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Cập nhật loại hộp số</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                @Html.HiddenFor(model => model.VehicleVariant.VariantId)
+                                <div class="modal-body">
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                @Html.LabelFor(model => model.VehicleVariant.VehicleTypeId)
+                                                <select id="VehicleVariant_VehicleTypeId" name="VehicleVariant.VehicleTypeId" class="form-control mb-3" required="required">
+                                                    <option disabled selected>Chọn loại xe</option>
+                                                    @foreach (var vehicleType in Model.ListVehicleTypes)
+                                                    {
+                                                        <option value="@vehicleType.VehicleTypeId">@vehicleType.VehicleTypeName</option>
+                                                    }
+                                                </select>
+                                            </div>
+                                            <div class="col-md-6">
+                                                @Html.LabelFor(model => model.VehicleVariant.VariantName)
+                                                @Html.TextBoxFor(model => model.VehicleVariant.VariantName, new { @class = "form-control mb-3", required = "required" })
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy bỏ</button>
+                                        <input type="submit" value="Cập nhật" class="btn btn-success">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+
+                <div class="modal fade" tabindex="-1" id="deleteVehicleVariantModal" role="dialog">
+                    <div class="modal-dialog" role="document" style="max-width: 600px">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Xóa</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <p>Bạn có muốn xóa loại xe này không?</p>
+                                <p class="text-warning"><small>Hành động này không được hoàn tác</small></p>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy bỏ</button>
+                                <form id="deleteForm" action="@Url.Action("Delete", "VehicleVariant")" method="post" enctype="multipart/form-data">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="id" id="deleteId" value="" />
+                                    <button type="submit" class="btn btn-success">Xóa</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts
+{
+    <script>
+        $(document).ready(function () {
+            $('.edit').click(function () {
+                var vehicleVariantId = $(this).data('id');
+                var name = $(this).data('name');
+                var type = $(this).data('type');
+
+                $('#updateVehicleVariantModal #VehicleVariant_VariantId').val(vehicleVariantId);
+                $('#updateVehicleVariantModal #VehicleVariant_VariantName').val(name);
+                $('#updateVehicleVariantModal #VehicleVariant_VehicleTypeId').val(type);
+            });
+        });
+
+        $('.delete').click(function () {
+            var vehicleVariantId = $(this).data('id');
+            $('#deleteId').val(vehicleVariantId);
+        });
+    </script>
+}

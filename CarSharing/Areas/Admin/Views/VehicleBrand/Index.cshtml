@@ -1,0 +1,252 @@
+﻿@using PagedList;
+@using PagedList.Mvc;
+@model CarSharing.Models.VehicleManagementModel
+@using CarSharing.Helpers
+@using CarSharing.Controllers
+
+@{
+    ViewBag.Title = "Quản lý xe";
+    ViewBag.ActionCurrent = "Index";
+    ViewBag.ControllerCurrent = "VehicleBrand";
+    //var pager = Html.PagedListPager(Model.PagedVehicleBrands, page => Url.Action("Index", new { page, currentFilter = ViewBag.CurrentFilter }), PagedListRenderOptions.ClassicPlusFirstAndLast);
+    var pager = Model.PagedVehicleBrands;
+    int totalPages = (int)Math.Ceiling((double)pager.TotalItemCount / pager.PageSize);
+    int maxVisiblePages = 5;
+    int startPage = Math.Max(1, pager.PageNumber - maxVisiblePages / 2);
+    int endPage = Math.Min(startPage + maxVisiblePages - 1, totalPages);
+
+    int itemsPerPage = pager.PageSize;
+
+    if (endPage - startPage + 1 < maxVisiblePages)
+    {
+        startPage = Math.Max(1, endPage - maxVisiblePages + 1);
+    }
+}
+
+<div class="main-content">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="table-wrapper">
+                <div class="table-title">
+                    <div class="row">
+                        <div class="col-sm-6 p-0 flex justify-content-lg-start justify-content-center">
+                            <h2 class="ml-lg-2">Quản lý loại hộp số</h2>
+                        </div>
+                        <div class="col-sm-6 p-0 flex justify-content-lg-end justify-content-center">
+                            <a href="#addVehicleBrandModal" class="btn btn-success" data-toggle="modal">
+                                <i class="material-icons">&#xE147;</i>
+                                <span>Thêm</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <table class="table table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th class="text-center">
+                                @Html.DisplayNameFor(model => model.VehicleBrand.BrandName)
+                            </th>
+                            <th class="text-center">
+                                @Html.DisplayNameFor(model => model.VehicleBrand.VehicleType.VehicleTypeName)
+                            </th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @foreach (var pagedVehicleBrand in Model.PagedVehicleBrands)
+                        {
+                            foreach (var vehicleBrand in pagedVehicleBrand.ListBrands)
+                            {
+                                <tr>
+                                    <td class="text-center" style="width: 43%">
+                                        @Html.DisplayFor(modelItem => vehicleBrand.BrandName)
+                                    </td>
+                                    <td class="text-center" style="width: 43%">
+                                        @Html.DisplayFor(modelItem => vehicleBrand.VehicleType.VehicleTypeName)
+                                    </td>
+                                    <td class="text-center">
+                                        <div class="d-flex justify-content-center align-items-center">
+                                            <div class="mr-2">
+                                                <a href="#updateVehicleBrandModal" class="edit" data-toggle="modal" data-id="@vehicleBrand.BrandId" data-name="@vehicleBrand.BrandName" data-type="@vehicleBrand.VehicleType.VehicleTypeId">
+                                                    <i class="material-icons" data-toggle="tooltip" title="Sửa">&#xE254;</i>
+                                                </a>
+                                            </div>
+                                            <div>
+                                                <a href="#deleteVehicleBrandModal" class="delete" data-toggle="modal" data-id="@vehicleBrand.BrandId">
+                                                    <i class="material-icons" data-toggle="tooltip" title="Xóa">&#xE872;</i>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+
+                <div class="clearfix">
+                    <div class="hint-text">Hiển thị <b>@Model.PagedVehicleBrands.Count</b> trong số <b>@Model.ListBrands.Count</b></div>
+                    <ul class="pagination">
+                        @if (pager.HasPreviousPage)
+                        {
+                            <li class="page-item">
+                                <a href="@Url.Action("Index", new { page = 1, currentFilter = ViewBag.CurrentFilter })" class="page-link">Đầu</a>
+                            </li>
+                            <li class="page-item">
+                                <a href="@Url.Action("Index", new { page = pager.PageNumber - 1, currentFilter = ViewBag.CurrentFilter })" class="page-link">Trước</a>
+                            </li>
+                        }
+
+                        @for (int pageNumber = startPage; pageNumber <= endPage; pageNumber++)
+                        {
+                            <li class="page-item @(pager.PageNumber == pageNumber ? "active" : "")">
+                                <a href="@Url.Action("Index", new { page = pageNumber, currentFilter = ViewBag.CurrentFilter })" class="page-link">@pageNumber</a>
+                            </li>
+                        }
+
+                        @if (pager.HasNextPage)
+                        {
+                            <li class="page-item">
+                                <a href="@Url.Action("Index", new { page = pager.PageNumber + 1, currentFilter = ViewBag.CurrentFilter })" class="page-link">Tiếp</a>
+                            </li>
+                            <li class="page-item">
+                                <a href="@Url.Action("Index", new { page = totalPages, currentFilter = ViewBag.CurrentFilter })" class="page-link">Cuối</a>
+                            </li>
+                        }
+                    </ul>
+                </div>
+
+                @using (Html.BeginForm("Create", "VehicleBrand", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                {
+                    @Html.AntiForgeryToken()
+                    <div class="modal fade" tabindex="-1" id="addVehicleBrandModal" role="dialog">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Thêm loại hộp số</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                @Html.LabelFor(model => model.VehicleBrand.VehicleType.VehicleTypeName)
+                                                <select id="VehicleTypeId" name="VehicleBrand.VehicleTypeId" class="form-control mb-3" required="required">
+                                                    <option disabled selected>Chọn loại hộp số</option>
+                                                    @foreach (var vehicleType in Model.ListVehicleTypes)
+                                                    {
+                                                        <option value="@vehicleType.VehicleTypeId">@vehicleType.VehicleTypeName</option>
+                                                    }
+                                                </select>
+                                            </div>
+                                            <div class="col-md-6">
+                                                @Html.LabelFor(model => model.VehicleBrand.BrandName)
+                                                @Html.TextBoxFor(model => model.VehicleBrand.BrandName, new { @class = "form-control mb-3", required = "required" })
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy bỏ</button>
+                                        <input type="submit" value="Thêm" class="btn btn-success">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+
+                @using (Html.BeginForm("Edit", "VehicleBrand", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                {
+                    @Html.AntiForgeryToken()
+                    <div class="modal fade" tabindex="-1" id="updateVehicleBrandModal" role="dialog">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Cập nhật loại hộp số</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                @Html.HiddenFor(model => model.VehicleBrand.BrandId)
+                                <div class="modal-body">
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                @Html.LabelFor(model => model.VehicleBrand.VehicleTypeId)
+                                                <select id="VehicleBrand_VehicleTypeId" name="VehicleBrand.VehicleTypeId" class="form-control mb-3" required="required">
+                                                    <option disabled selected>Chọn loại xe</option>
+                                                    @foreach (var vehicleType in Model.ListVehicleTypes)
+                                                    {
+                                                        <option value="@vehicleType.VehicleTypeId">@vehicleType.VehicleTypeName</option>
+                                                    }
+                                                </select>
+                                            </div>
+                                            <div class="col-md-6">
+                                                @Html.LabelFor(model => model.VehicleBrand.BrandName)
+                                                @Html.TextBoxFor(model => model.VehicleBrand.BrandName, new { @class = "form-control mb-3", required = "required" })
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy bỏ</button>
+                                        <input type="submit" value="Cập nhật" class="btn btn-success">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+
+                <div class="modal fade" tabindex="-1" id="deleteVehicleBrandModal" role="dialog">
+                    <div class="modal-dialog" role="document" style="max-width: 600px">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Xóa</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <p>Bạn có muốn xóa loại xe này không?</p>
+                                <p class="text-warning"><small>Hành động này không được hoàn tác</small></p>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy bỏ</button>
+                                <form id="deleteForm" action="@Url.Action("Delete", "VehicleBrand")" method="post" enctype="multipart/form-data">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="id" id="deleteId" value="" />
+                                    <button type="submit" class="btn btn-success">Xóa</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts
+{
+    <script>
+        $(document).ready(function () {
+            $('.edit').click(function () {
+                var vehicleBrandId = $(this).data('id');
+                var name = $(this).data('name');
+                var type = $(this).data('type');
+
+                $('#updateVehicleBrandModal #VehicleBrand_BrandId').val(vehicleBrandId);
+                $('#updateVehicleBrandModal #VehicleBrand_BrandName').val(name);
+                $('#updateVehicleBrandModal #VehicleBrand_VehicleTypeId').val(type);
+            });
+        });
+
+        $('.delete').click(function () {
+            var vehicleBrandId = $(this).data('id');
+            $('#deleteId').val(vehicleBrandId);
+        });
+    </script>
+}

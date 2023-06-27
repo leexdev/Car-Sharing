@@ -5,8 +5,8 @@
 
 @{
     var isVehicleTypeActive = ViewContext.RouteData.Values["controller"].ToString() == "VehicleType" && ViewContext.RouteData.Values["action"].ToString() == "Index";
-    var isVehicleVariantActive = ViewContext.RouteData.Values["controller"].ToString() == "VehicleType" && ViewContext.RouteData.Values["action"].ToString() == "Variant";
-    var isVehicleBrandActive = ViewContext.RouteData.Values["controller"].ToString() == "VehicleType" && ViewContext.RouteData.Values["action"].ToString() == "Brand";
+    var isVehicleVariantActive = ViewContext.RouteData.Values["controller"].ToString() == "VehicleVariant" && ViewContext.RouteData.Values["action"].ToString() == "Index";
+    var isVehicleBrandActive = ViewContext.RouteData.Values["controller"].ToString() == "VehicleBrand" && ViewContext.RouteData.Values["action"].ToString() == "Index";
     var isVehicleActive = ViewContext.RouteData.Values["controller"].ToString() == "Vehicle" && ViewContext.RouteData.Values["action"].ToString() == "Index";
     var isUserActive = ViewContext.RouteData.Values["controller"].ToString() == "User" && ViewContext.RouteData.Values["action"].ToString() == "Index";
     string actionCurrent = ViewBag.ActionCurrent;
@@ -75,15 +75,15 @@
                         </li>
                         <li>
                             <a href="#vehicleType" data-toggle="collapse" aria-expanded="true" class="dropdown-toggle">Quản lý loại xe</a>
-                            <ul class="collapse list-unstyled menu bg-body-secondary" id="vehicleType">
+                            <ul class="collapse active list-unstyled menu bg-body-secondary" id="vehicleType">
                                 <li class="@(isVehicleTypeActive ? "active" : "")">
                                     <a href="@Url.Action("Index", "VehicleType")">Loại xe</a>
                                 </li>
                                 <li class="@(isVehicleVariantActive ? "active" : "")">
-                                    <a href="@Url.Action("Variant", "VehicleType")">Loại hộp số</a>
+                                    <a href="@Url.Action("Index", "VehicleVariant")">Loại hộp số</a>
                                 </li>
                                 <li class="@(isUserActive ? "active" : "")">
-                                    <a href="@Url.Action("Brand", "VehicleType")">Thương hiệu</a>
+                                    <a href="@Url.Action("Index", "VehicleBrand")">Hãng xe</a>
                                 </li>
                                 <!-- Các menu khác -->
                             </ul>
@@ -194,8 +194,8 @@
     <script src="~/Areas/Admin/Content/js/jquery-3.3.1.slim.min.js"></script>
     <script src="~/Areas/Admin/Content/js/popper.min.js"></script>
     <script src="~/Areas/Admin/Content/js/bootstrap.min.js"></script>
-    <script src="~/Areas/Admin/Content/js/jquery-3.3.1.min.js"></script>
 
+    <script src="~/Areas/Admin/Content/js/jquery-3.3.1.min.js"></script>
     <script src="~/Content/plugin/ckeditor/ckeditor.js"></script>
     @RenderSection("scripts", false);
 

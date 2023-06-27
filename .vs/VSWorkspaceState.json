@@ -1,7 +1,13 @@
 {
   "ExpandedNodes": [
-    ""
+    "",
+    "\\CarSharing",
+    "\\CarSharing\\Areas",
+    "\\CarSharing\\Areas\\Admin",
+    "\\CarSharing\\Areas\\Admin\\Views",
+    "\\CarSharing\\Areas\\Admin\\Views\\Vehicle",
+    "\\CarSharing\\Areas\\Admin\\Views\\VehicleVariant"
   ],
-  "SelectedNode": "\\CarSharing.sln",
+  "SelectedNode": "\\CarSharing\\Areas\\Admin\\Views\\VehicleVariant\\Index.cshtml",
   "PreviewInSolutionExplorer": false
 }

@@ -35,6 +35,10 @@
                         <div class="fs-6 pt-1 fw-bold text-body-tertiary"><i class="fa-solid fa-location-dot mx-1 text-body"></i>@Model.Vehicle.District.name, @Model.Vehicle.District.Province.Name</div>
                     </div>
                     <div class="col-lg-12 my-4">
+                        <h3 class="fw-bold fs-5">Hãng xe</h3>
+                        <div>@Model.Vehicle.VehicleBrand.BrandName</div>
+                    </div>
+                    <div class="col-lg-12 mb-4">
                         <h3 class="fw-bold fs-5">Năm sản xuất</h3>
                         <div>@Model.Vehicle.Year</div>
                     </div>
@@ -42,9 +46,9 @@
                         <h3 class="fw-bold fs-5">Biển số xe</h3>
                         <div>@Model.Vehicle.RegistrationNumber</div>
                     </div>
-                    <div class="col-lg-12 mb-4">
+                    <div class="col-lg-12 mb-4" id="content-detail">
                         <h3 class="fw-bold fs-5">Thông tin chi tiết</h3>
-                        <div>@Model.Vehicle.Content</div>
+                        <div>@Html.Raw(Model.Vehicle.Content)</div>
                     </div>
                 </div>
             </div>
