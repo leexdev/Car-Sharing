@@ -1,0 +1,83 @@
+﻿@model CarSharing.Models.VehicleManagementModel
+
+@{
+    ViewBag.Title = "Thông tin cá nhân";
+}
+
+<div id="mycontent" class="pt-6 pb-5 pb-lg-0" style="min-height: 700px">
+    <div class="container">
+        <div class="row my-3">
+            <div class="col-lg-4">
+                <div class="list-group">
+                    <a href="@Url.Action("TripList", "UserInfo")" class="list-group-item list-group-item-action" aria-current="true">
+                        Danh sách chuyến
+                    </a>
+                    <a href="#" class="list-group-item list-group-item-action bg-success active">Thông tin cá nhân</a>
+                    <a href="@Url.Action("ChangePassword", "UserInfo")" class="list-group-item list-group-item-action">Đổi mật khẩu</a>
+                </div>
+            </div>
+            <div class="col-lg-8 mt-3 mt-lg-0">
+                <div class="text-uppercase fw-bold">Thông tin cá nhân</div>
+                <hr>
+                <div class="information">
+                    <div class="row">
+                        <div class="col-lg-4">
+                            <div class="image-container">
+                                <img class="w-100" src="~/Content/assets/img/NAck_WBdKcVY88Th9rGAIQ.jpg" alt="">
+                                <div class="update-notification text-center"><i class="fa-solid fa-camera"></i> Cập nhật</div>
+                            </div>
+                        </div>
+                        <div class="col-lg-8">
+                            <div class="user-name mb-3">
+                                <div class="fw-bold">Họ & Tên</div>
+                                <div>Nguyễn Văn A</div>
+                            </div>
+                            <div class="phone-user mb-3">
+                                <div class="fw-bold">Số điện thoại</div>
+                                <div>1234</div>
+                            </div>
+                            <div class="user-email mb-3">
+                                <div class="fw-bold">Địa chỉ Email</div>
+                                <div>abc@gmail.com</div>
+                            </div>
+                            <div class="user-email">
+                                <button type="button" class="btn btn-success bg-white text-success" data-bs-toggle="modal" data-bs-target="#updateUserModal">
+                                    <i class="fa-solid fa-pen-to-square"></i> Chỉnh sửa
+                                </button>
+
+                                <div class="modal fade" id="updateUserModal" tabindex="-1" aria-hidden="true" style="margin-top: 100px;">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h1 class="modal-title fs-5 fw-bold">Thay đổi thông tin cá nhân</h1>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <div class="mb-3">
+                                                    <label for="name" class="form-label">Họ tên</label>
+                                                    <input type="text" class="form-control" id="name">
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="phone" class="form-label">Số điện thoại</label>
+                                                    <input type="number" class="form-control" id="phone">
+                                                </div>
+                                                <div class="mb-3">
+                                                    <label for="email" class="form-label">Địa chỉ Email</label>
+                                                    <input type="email" class="form-control" id="email">
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Quay lại</button>
+                                                <button type="button" class="btn btn-primary">Lưu thay đổi</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

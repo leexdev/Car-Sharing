@@ -49,9 +49,9 @@
                                     <i class="fa-solid fa-user"></i>
                                 </button>
                                 <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item" href="#">Danh sách chuyến</a></li>
-                                    <li><a class="dropdown-item" href="#">Thông tin cá nhân</a></li>
-                                    <li><a class="dropdown-item" href="#">Đổi mật khẩu</a></li>
+                                    <li><a class="dropdown-item" href="@Url.Action("TripList", "UserInfo")">Danh sách chuyến</a></li>
+                                    <li><a class="dropdown-item" href="@Url.Action("Information", "UserInfo")">Thông tin cá nhân</a></li>
+                                    <li><a class="dropdown-item" href="@Url.Action("ChangePassword", "UserInfo")">Đổi mật khẩu</a></li>
                                 </ul>
                             </div>
                         </div>
@@ -96,7 +96,7 @@
                                     </button>
                                 </p>
                                 <div class="collapse border border-1" id="collapseMenuInformation">
-                                    <a href="#" class="card card-body border-0 text-decoration-none">
+                                    <a href="@Url.Action("TripList", "User")" class="card card-body border-0 text-decoration-none">
                                         Danh sách chuyến
                                     </a>
                                     <a href="#" class="card card-body border-0 text-decoration-none">

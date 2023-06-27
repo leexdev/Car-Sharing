@@ -1,4 +1,4 @@
-* {
+﻿* {
     font-family: 'Roboto', sans-serif;
     letter-spacing: 1px;
 }
@@ -75,3 +75,17 @@
     height: auto;
 }
 
+
+.image-container {
+    position: relative;
+}
+
+.update-notification {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    padding: 20px;
+    background-color: rgba(128, 128, 128, 0.5); /* Màu xám mờ */
+    color: white;
+}
+  

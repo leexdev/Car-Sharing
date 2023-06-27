@@ -6,8 +6,11 @@
     "\\CarSharing\\Areas\\Admin",
     "\\CarSharing\\Areas\\Admin\\Views",
     "\\CarSharing\\Areas\\Admin\\Views\\Vehicle",
-    "\\CarSharing\\Areas\\Admin\\Views\\VehicleVariant"
+    "\\CarSharing\\Areas\\Admin\\Views\\VehicleVariant",
+    "\\CarSharing\\Views",
+    "\\CarSharing\\Views\\Home",
+    "\\CarSharing\\Views\\Shared"
   ],
-  "SelectedNode": "\\CarSharing\\Areas\\Admin\\Views\\VehicleVariant\\Index.cshtml",
+  "SelectedNode": "\\CarSharing\\Views\\Home\\Index.cshtml",
   "PreviewInSolutionExplorer": false
 }

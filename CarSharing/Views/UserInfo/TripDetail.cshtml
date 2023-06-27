@@ -1,0 +1,54 @@
+﻿<div id="mycontent" class="pt-6 pb-5 pb-lg-0" style="min-width: 700px;">
+    <div class="container">
+        <div class="row my-3">
+            <div class="col-lg-4">
+                <div class="list-group">
+                    <a href="@Url.Action("ListTrip", "UserInfo")" class="list-group-item list-group-item-action bg-success active" aria-current="true">
+                        Danh sách chuyến
+                    </a>
+                    <a href="@Url.Action("Information", "UserInfo")" class="list-group-item list-group-item-action">Thông tin cá nhân</a>
+                    <a href="@Url.Action("ChangePassword", "UserInfo")" class="list-group-item list-group-item-action">Đổi mật khẩu</a>
+                </div>
+            </div>
+            <div class="col-lg-8 mt-3 mt-lg-0">
+                <div class="row">
+                    <div class="col-lg-5">
+                        <img class="w-100 img-vehicle" src="./assets/img/NAck_WBdKcVY88Th9rGAIQ.jpg" alt="">
+                    </div>
+                    <div class="col-lg-7">
+                        <div class="fs-4 fw-bold text-success">KIA MORNING 1.25 SI AT</div>
+                        <div class="fs-5"><i class="fa-solid fa-star text-warning mt-3"></i>5.0</div>
+                        <div class="fs-6 pt-1 fw-bold text-body-tertiary"><i class="fa-solid fa-location-dot mx-1 text-body"></i>Quận Thủ Đức, Hồ Chí Minh</div>
+                    </div>
+                    <div class="row mt-4">
+                        <div class="col-6">
+                            <div class="text-uppercase fs-6 fw-bold text-success mb-3">Thông tin khách hàng</div>
+                            <div class="text-uppercase fs-6 fw-bold mb-1">Họ tên</div>
+                            <div class="fs-6 mb-3">Nguyễn Văn A</div>
+                            <div class="text-uppercase fs-6 fw-bold mb-1">Số điện thoại</div>
+                            <div class="fs-6 mb-3">1234</div>
+                            <div class="text-uppercase fs-6 fw-bold mb-1">Địa chỉ Email</div>
+                            <div class="fs-6 mb-3">abc@gmail.com</div>
+                        </div>
+                        <div class="col-6">
+                            <div class="text-uppercase fs-6 fw-bold text-success mb-3">Chi tiết đặt xe</div>
+                            <div class="text-uppercase fs-6 fw-bold mb-1">Trạng thái</div>
+                            <div class="fs-6 mb-3">Chờ duyệt</div>
+                            <div class="text-uppercase fs-6 fw-bold mb-1">Hình thức thanh toán</div>
+                            <div class="fs-6 mb-3">Thanh toán khi nhận xe</div>
+                            <div class="text-uppercase fs-6 fw-bold mb-1">Giá thuê</div>
+                            <div class="fs-6 mb-3">1.147.160 VNĐ</div>
+                            <div class="text-uppercase fs-6 fw-bold mb-1">Thời gian thuê</div>
+                            <div class="fs-6 mb-3">07:00 29/06/2023 → 19:00 30/06/2023</div>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-center">
+                        <a href="@Url.Action("TripList", "UserInfo")">
+                            <button type="button" class="btn btn-success my-2 mt-lg-0 px-5">Quay lại</button>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
