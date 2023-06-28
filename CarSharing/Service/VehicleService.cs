@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using CarSharing.Helpers;
 using System.Data.Entity;
+using System.ComponentModel;
 
 namespace CarSharing.Service
 {
@@ -33,7 +34,7 @@ namespace CarSharing.Service
         public List<Province> GetProvinces()
         {
             var provincesWithVehicles = db.Districts
-                .Where(d => d.Vehicles.Count(v => !v.isDeleted) >= 1)
+                .Where(d => d.Vehicles.Any(v => !v.isDeleted))
                 .Select(d => d.Province)
                 .Distinct()
                 .ToList();
@@ -46,10 +47,23 @@ namespace CarSharing.Service
             return db.Districts.ToList();
         }
 
+        public List<District> GetDistrictsByProvince(int provinceId)
+        {
+            return db.Districts
+                .Where(d => d.province_code == provinceId && d.Vehicles.Any(v => v.isDeleted == false))
+                .ToList();
+        }
+
         public List<Vehicle> GetVehicles()
         {
             return db.Vehicles.Where(vehicle => !vehicle.isDeleted).ToList();
         }
+
+        public List<Vehicle> SearchVehicles(Guid vehicleType, int provinceId)
+        {
+            return db.Vehicles.Where(vehicle => vehicle.VehicleBrand.VehicleTypeId == vehicleType && vehicle.District.province_code == provinceId && !vehicle.isDeleted).ToList();
+        }
+
         public VehicleType GetVehicleType(Guid id)
         {
             return db.VehicleTypes.SingleOrDefault(vehicleType => vehicleType.VehicleTypeId == id && !vehicleType.isDeleted);
@@ -79,6 +93,8 @@ namespace CarSharing.Service
         {
             VehicleManagementModel objHomeModel = new VehicleManagementModel();
             objHomeModel.ListVehicleTypes = GetVehicleTypes();
+            objHomeModel.ListVehicleVariants = GetVariants();
+            objHomeModel.ListBrands = GetBrands();
             objHomeModel.ListProvinces = GetProvinces();
             objHomeModel.ListDistricts = GetDistricts();
             objHomeModel.ListVehicles = GetVehicles();
@@ -156,17 +172,25 @@ namespace CarSharing.Service
 
         public List<VehicleVariant> GetVariantsByVehicleType(Guid vehicleTypeId)
         {
-                return db.VehicleVariants
+            return db.VehicleVariants
                 .ToList()
-                .Where(v => v.VehicleTypeId == vehicleTypeId)
+                .Where(v => v.VehicleTypeId == vehicleTypeId && !v.isDeleted)
                 .ToList();
         }
+
         public List<VehicleBrand> GetBrandsByVehicleType(Guid vehicleTypeId)
         {
             return db.VehicleBrands
-            .ToList()
-            .Where(v => v.VehicleTypeId == vehicleTypeId)
-            .ToList();
+                .ToList()
+                .Where(v => v.VehicleTypeId == vehicleTypeId && !v.isDeleted)
+                .ToList();
+        }
+
+        public List<Province> GetProvinceByVehicleType(Guid vehicleTypeId)
+        {
+            return db.Provinces
+                .Where(p => p.Districts.Any(d => d.Vehicles.Any(v => v.VehicleVariant.VehicleTypeId == vehicleTypeId && !v.isDeleted)))
+                .ToList();
         }
 
         public List<District> GetDistrictByProvince(int CodeProvince)

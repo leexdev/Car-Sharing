@@ -5,12 +5,13 @@
     "\\CarSharing\\Areas",
     "\\CarSharing\\Areas\\Admin",
     "\\CarSharing\\Areas\\Admin\\Views",
-    "\\CarSharing\\Areas\\Admin\\Views\\Vehicle",
     "\\CarSharing\\Areas\\Admin\\Views\\VehicleVariant",
+    "\\CarSharing\\Controllers",
     "\\CarSharing\\Views",
     "\\CarSharing\\Views\\Home",
-    "\\CarSharing\\Views\\Shared"
+    "\\CarSharing\\Views\\Shared",
+    "\\CarSharing\\Views\\Vehicle"
   ],
-  "SelectedNode": "\\CarSharing\\Views\\Home\\Index.cshtml",
+  "SelectedNode": "\\CarSharing\\Controllers\\SearchController.cs",
   "PreviewInSolutionExplorer": false
 }

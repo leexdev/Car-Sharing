@@ -1,0 +1,84 @@
+﻿@model CarSharing.Models.VehicleManagementModel
+
+@{ 
+    var pager = Model.PagedVehicles;
+    int totalPages = (int)Math.Ceiling((double)pager.TotalItemCount / pager.PageSize);
+    int maxVisiblePages = 5;
+
+    int startPage = Math.Max(1, pager.PageNumber - maxVisiblePages / 2);
+    int endPage = Math.Min(startPage + maxVisiblePages - 1, totalPages);
+
+    int itemsPerPage = pager.PageSize;
+
+    if (endPage - startPage + 1 < maxVisiblePages)
+    {
+        startPage = Math.Max(1, endPage - maxVisiblePages + 1);
+    }
+}
+<div id="filteredVehicleList">
+    <div class="row">
+        @foreach (var item in Model.ListVehicles)
+        {
+            <div class="col-lg-3 col-md-4 text-body p-2">
+                <div class="border rounded-5 text-decoration-none bg-body p-3 h-100">
+                    <img class="img-md-vehicle img-vehicle rounded-4 my-2" src="@item.ImageVehicle" alt="">
+                    <span class="fs-7 bg-primary-subtle p-1 rounded-5">@item.VehicleVariant.VariantName</span>
+                    <h6 class="text-uppercase fw-bold mt-3">@item.VehicleName</h6>
+                    <div class="fs-7">
+                        @if (item.Reviews.Count == 0)
+                        {
+                            @Html.Raw("Chưa có đánh giá");
+                        }
+                        else
+                        {
+                            float rating = 0;
+                            foreach (var review in item.Reviews)
+                            {
+                                rating += review.Rating;
+                            }
+                            <i class="fa-solid fa-star text-warning"></i>
+                            @Html.Raw((rating / item.Reviews.Count).ToString("0.0"))
+                        }
+                    </div>
+                    <div class="fs-7 pt-1 fw-bold text-body-tertiary"><i class="fa-solid fa-location-dot mx-1 text-body"></i>@item.District.name, @item.District.Province.Name</div>
+                    <hr class="my-3">
+                    <div class="row">
+                        <div class="col-lg-6 d-flex align-items-center">
+                            <div class="fs-5 fw-bold text-success">@(Math.Round(item.VehiclePrice / 1000, 0).ToString("0") + "k")<span class="fs-6 fw-normal text-secondary">/ngày</span></div>
+                        </div>
+                        <div class="col-lg-6">
+                            <a href="@Url.Action("Detail", "Vehicle", new {id = item.VehicleId})">
+                                <button type="button" class="btn btn-success w-100 p-2">Chọn xe</button>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+    <div class="d-flex justify-content-center pt-5">
+        <nav>
+            <ul class="pagination">
+                @if (pager.HasPreviousPage)
+                {
+                    <li class="page-item">
+                        <a href="@Url.Action("Index", new { page = pager.PageNumber - 1, currentFilter = ViewBag.CurrentFilter, vehicleTypeId = ViewBag.vehicleTypeId, variantId = ViewBag.variantId, brandId = ViewBag.brandId, provinceCode = ViewBag.provinceCode, districtCode = ViewBag.districtCode })" class="page-link">Trước</a>
+                    </li>
+                }
+                @for (int pageNumber = startPage; pageNumber <= endPage; pageNumber++)
+                {
+                    <li class="page-item @(pager.PageNumber == pageNumber ? "active" : "")">
+                        <a href="@Url.Action("Index", new { page = pageNumber, currentFilter = ViewBag.CurrentFilter, vehicleTypeId = ViewBag.vehicleTypeId, variantId = ViewBag.variantId, brandId = ViewBag.brandId, provinceCode = ViewBag.provinceCode, districtCode = ViewBag.districtCode })" class="page-link">@pageNumber</a>
+                    </li>
+                }
+                @if (pager.HasNextPage)
+                {
+                    <li class="page-item">
+                        <a href="@Url.Action("Index", new { page = pager.PageNumber + 1, currentFilter = ViewBag.CurrentFilter, vehicleTypeId = ViewBag.vehicleTypeId, variantId = ViewBag.variantId, brandId = ViewBag.brandId, provinceCode = ViewBag.provinceCode, districtCode = ViewBag.districtCode })" class="page-link">Tiếp</a>
+                    </li>
+                }
+            </ul>
+        </nav>
+    </div>
+</div>
+

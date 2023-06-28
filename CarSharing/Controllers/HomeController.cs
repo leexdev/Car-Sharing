@@ -3,6 +3,7 @@ using CarSharing.Models;
 using CarSharing.Service;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 
@@ -16,16 +17,24 @@ namespace CarSharing.Controllers
         public HomeController()
         {
             vehicleService = new VehicleService();
-            _apiService = new ApiService();
         }
         public async Task<ActionResult> Index()
         {
             VehicleManagementModel objVehicleModel = vehicleService.GetHomeModel();
-            ICollection<Review> reviews = vehicleService.GetReviews();
-
-            Dictionary<Guid, double> ratingsByVehicleId = ReviewHelper.GetRatingsByVehicleId(reviews);
-            ViewBag.RatingsByVehicleId = ratingsByVehicleId;
             return View(objVehicleModel);
+        }
+
+        public JsonResult GetProvinces(Guid vehicleTypeId)
+        {
+            var provinces = vehicleService.GetProvinceByVehicleType(vehicleTypeId);
+
+            var provincesData = provinces.Select(b => new
+            {
+                Code = b.Code,
+                Name = b.Name
+            });
+
+            return Json(provincesData, JsonRequestBehavior.AllowGet);
         }
     }
 }

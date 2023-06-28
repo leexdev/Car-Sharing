@@ -148,6 +148,7 @@
     <Compile Include="Areas\User\UserAreaRegistration.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\PartnerController.cs" />
+    <Compile Include="Controllers\PayController.cs" />
     <Compile Include="Controllers\SearchController.cs" />
     <Compile Include="Controllers\UserInFoController.cs" />
     <Compile Include="Controllers\VehicleController.cs" />
@@ -155,7 +156,6 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Helpers\diacriticsHelper.cs" />
-    <Compile Include="Helpers\ReviewHelper.cs" />
     <Compile Include="Helpers\TimeHelper.cs" />
     <Compile Include="Models\Booking.cs">
       <DependentUpon>DbModel.tt</DependentUpon>
@@ -873,7 +873,6 @@
     <Folder Include="Areas\Admin\Data\" />
     <Folder Include="Areas\User\Controllers\" />
     <Folder Include="Areas\User\Data\" />
-    <Folder Include="Views\Admin\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
@@ -958,6 +957,8 @@
     <Content Include="Views\UserInfo\Information.cshtml" />
     <Content Include="Views\UserInfo\ChangePassword.cshtml" />
     <Content Include="Views\UserInfo\TripDetail.cshtml" />
+    <Content Include="Views\Pay\Index.cshtml" />
+    <Content Include="Views\Shared\_ListVehicleSearch.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

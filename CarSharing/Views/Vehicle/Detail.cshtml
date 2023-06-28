@@ -8,7 +8,6 @@
     {
         rating += item.Rating;
     }
-
 }
 
 <div id="mycontent" class="pt-6 pb-5 pb-lg-0" onload="updateEndDate()" style="min-height: 700px">
@@ -93,7 +92,7 @@
                         </div>
                     </div>
                 </div>
-                <a href="./pay.html">
+                <a href="@Url.Action("Index", "Pay", new {id = Model.Vehicle.VehicleId })">
                     <button type="button" class="btn btn-success w-100">Đặt xe</button>
                 </a>
             </div>
@@ -137,7 +136,7 @@
                         }
                     </div>
                 </div>
-                @if(Model.ListReviews.Count > 3)
+                @if (Model.ListReviews.Count > 3)
                 {
                     <div class="d-flex justify-content-center my-3">
                         <button type="button" class="btn btn-success">Xem thêm</button>

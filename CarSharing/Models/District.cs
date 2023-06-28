@@ -9,6 +9,7 @@
 
 namespace CarSharing.Models
 {
+    using Newtonsoft.Json;
     using System;
     using System.Collections.Generic;
     
@@ -23,7 +24,8 @@ namespace CarSharing.Models
         public int code { get; set; }
         public string name { get; set; }
         public int province_code { get; set; }
-    
+
+        [JsonIgnore]
         public virtual Province Province { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Vehicle> Vehicles { get; set; }

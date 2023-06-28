@@ -9,49 +9,48 @@
             <div class="col-lg-7 col-0">
 
             </div>
-            <div class="col-lg-4 bg-body-tertiary pb-5 rounded-3 my-10">
-                <div class="row bg-body-tertiary">
-                    <span class="text-center fw-lighter mt-4 fs-7">Hơn @Model.ListVehicles.Count+ xe đang được cho thuê</span>
-                    <h3 class="text-center fw-bold pt-3 pb-4">Bạn cần thuê xe?</h3>
-                    <div class="col-lg-6">
-                        <div class="input-group">
-                            <select class="form-select" id="inputGroupVehicleType">
-                                @foreach (var item in Model.ListVehicleTypes)
-                                {
-                                    <option value="@item.VehicleTypeId">@item.VehicleTypeName</option>
-                                }
-                            </select>
+                <div class="col-lg-4 bg-body-tertiary pb-5 rounded-3 my-10">
+                    @using (Html.BeginForm("Index", "Search", FormMethod.Get))
+                    {
+                    <div class="row bg-body-tertiary">
+                        <span class="text-center fw-lighter mt-4 fs-7">Hơn @Model.ListVehicles.Count+ xe đang được cho thuê</span>
+                        <h3 class="text-center fw-bold pt-3 pb-4">Bạn cần thuê xe?</h3>
+                        <div class="col-lg-6">
+                            <div class="input-group">
+                                <select class="form-select" id="VehicleTypeId" name="vehicleTypeId">
+                                    <option disabled selected>Chọn loại xe</option>
+                                    @foreach (var item in Model.ListVehicleTypes)
+                                    {
+                                        <option value="@item.VehicleTypeId" name="VehicleType_VehicleTypeId">@item.VehicleTypeName</option>
+                                    }
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 mt-2 mt-lg-0">
+                            <div class="input-group">
+                                <select class="form-select" id="ProvinceCode" name="provinceCode" required>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-lg-6 mt-2">
+                            <span class="fw-lighter">Ngày nhận xe</span>
+                            <fieldset>
+                                <input class="text-center border w-100" type="datetime-local" id="dateTimePickerStart" name="dateTimePicker" onchange="updateEndDate()">
+                            </fieldset>
+                        </div>
+                        <div class="col-lg-6 mt-2">
+                            <span class="fw-lighter">Ngày trả xe</span>
+                            <fieldset>
+                                <input class="text-center border w-100" type="datetime-local" id="dateTimePickerEnd" name="dateTimePicker" onchange="updateEndDate()">
+                            </fieldset>
+                        </div>
+                        <div class="col-lg-12 mt-2">
+                             <button type="submit" class="btn btn-success w-100 my-2 py-2">Tìm xe giá tốt</button>
                         </div>
                     </div>
-                    <div class="col-lg-6 mt-2 mt-lg-0">
-                        <div class="input-group">
-                            <select class="form-select" id="inputGroupProvinces">
-                                @foreach (var item in Model.ListProvinces)
-                                {
-                                    <option value="@item.Code">@item.Name</option>
-                                }
-                            </select>
-                        </div>
-                    </div>
-                    <div class="col-lg-6 mt-2">
-                        <span class="fw-lighter">Ngày nhận xe</span>
-                        <fieldset>
-                            <input class="text-center border w-100" type="datetime-local" id="dateTimePickerStart" name="dateTimePicker" onchange="updateEndDate()">
-                        </fieldset>
-                    </div>
-                    <div class="col-lg-6 mt-2">
-                        <span class="fw-lighter">Ngày trả xe</span>
-                        <fieldset>
-                            <input class="text-center border w-100" type="datetime-local" id="dateTimePickerEnd" name="dateTimePicker" onchange="updateEndDate()">
-                        </fieldset>
-                    </div>
-                    <div class="col-lg-12 mt-2">
-                        <a href="@Url.Action("Index", "Search")">
-                            <button type="button" class="btn btn-success w-100 my-2 py-2">Tìm xe giá tốt</button>
-                        </a>
-                    </div>
+                    }
                 </div>
-            </div>
+
             <div class="col-lg-1">
 
             </div>
@@ -77,7 +76,22 @@
                                 }
                                 else
                                 {
-                                    <div class="fs-7"><i class="fa-solid fa-star text-warning"></i>@((ViewBag.RatingsByVehicleId[item.VehicleId] / (double)item.Reviews.Count).ToString("0.0"))</div>
+                                    <div class="fs-7">
+                                        @if (item.Reviews.Count == 0)
+                                        {
+                                            @Html.Raw("Chưa có đánh giá");
+                                        }
+                                        else
+                                        {
+                                            float rating = 0;
+                                            foreach (var review in item.Reviews)
+                                            {
+                                                rating += review.Rating;
+                                            }
+                                            <i class="fa-solid fa-star text-warning"></i>
+                                            @Html.Raw((rating / item.Reviews.Count).ToString("0.0"))
+                                        }
+                                    </div>
                                 }
                                 <hr class="my-3">
                                 <div class="row my-2">
@@ -116,7 +130,22 @@
                                     }
                                     else
                                     {
-                                        <div class="fs-7"><i class="fa-solid fa-star text-warning"></i>@((ViewBag.RatingsByVehicleId[item.VehicleId] / (double)item.Reviews.Count).ToString("0.0"))</div>
+                                        <div class="fs-7">
+                                            @if (item.Reviews.Count == 0)
+                                            {
+                                                @Html.Raw("Chưa có đánh giá");
+                                            }
+                                            else
+                                            {
+                                                float rating = 0;
+                                                foreach (var review in item.Reviews)
+                                                {
+                                                    rating += review.Rating;
+                                                }
+                                                <i class="fa-solid fa-star text-warning"></i>
+                                                @Html.Raw((rating / item.Reviews.Count).ToString("0.0"))
+                                            }
+                                        </div>
                                     }
                                     <hr class="my-3">
                                     <div class="row my-2">
@@ -257,4 +286,27 @@
 
 @section scripts {
     <script src="~/Content/assets/js/index.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            $("#VehicleTypeId").change(function () {
+                var selectedVehicleTypeId = $(this).val();
+                $.ajax({
+                    url: '/Home/GetProvinces',
+                    type: 'GET',
+                    data: { vehicleTypeId: selectedVehicleTypeId },
+                    success: function (result) {
+                        var provincesDropdown = $("#ProvinceCode");
+                        provincesDropdown.empty();
+
+                        provincesDropdown.prepend($('<option disabled selected></option>').text("Chọn tỉnh"));
+
+                        $.each(result, function (index, province) {
+                            provincesDropdown.append($('<option></option>').val(province.Code).text(province.Name));
+                        });
+                    },
+                });
+            });
+        });
+    </script>
 }
