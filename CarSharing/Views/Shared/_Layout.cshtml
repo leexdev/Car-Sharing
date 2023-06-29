@@ -1,4 +1,12 @@
-﻿<!DOCTYPE html>
+﻿@if (TempData["Message"] != null)
+{
+    <script>
+        var errorMessage = "@Html.Raw(TempData["Message"])";
+        alert(errorMessage);
+    </script>
+}
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -43,17 +51,24 @@
                         </div>
                         <div class="col-3 py-3 text-center"><a href="#" class="text-decoration-none text-dark p-1">Blog</a></div>
                         <div class="col-3 py-2">
-                            @*<button type="button" class="btn bg-info-subtle border border-success text-success" data-bs-toggle="modal" data-bs-target="#LoginModal">Đăng nhập</button>*@
-                            <div class="dropdown">
-                                <button class="btn border-0 dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                                    <i class="fa-solid fa-user"></i>
-                                </button>
-                                <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item" href="@Url.Action("TripList", "UserInfo")">Danh sách chuyến</a></li>
-                                    <li><a class="dropdown-item" href="@Url.Action("Information", "UserInfo")">Thông tin cá nhân</a></li>
-                                    <li><a class="dropdown-item" href="@Url.Action("ChangePassword", "UserInfo")">Đổi mật khẩu</a></li>
-                                </ul>
-                            </div>
+                            @if (Session["Id"] != null)
+                            {
+                                <div class="dropdown">
+                                    <button class="btn border-0 dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i class="fa-solid fa-user"></i>
+                                    </button>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="dropdown-item" href="@Url.Action("TripList", "UserInfo")">Danh sách chuyến</a></li>
+                                        <li><a class="dropdown-item" href="@Url.Action("Information", "UserInfo")">Thông tin cá nhân</a></li>
+                                        <li><a class="dropdown-item" href="@Url.Action("ChangePassword", "UserInfo")">Đổi mật khẩu</a></li>
+                                        <li><a class="dropdown-item" href="@Url.Action("Logout", "Home")">Đăng xuất</a></li>
+                                    </ul>
+                                </div>
+                            }
+                            else
+                            {
+                                <button type="button" class="btn bg-info-subtle border border-success text-success" data-bs-toggle="modal" data-bs-target="#LoginModal" id="loginButton">Đăng nhập</button>
+                            }
                         </div>
                     </div>
                 </div>
@@ -89,23 +104,30 @@
                             </div>
                             <div class="col-12 py-3 text-center"><a href="#" class="text-decoration-none text-dark p-1">Khuyến mãi</a></div>
                             <div class="col-12 py-2 text-center">
-                                @*<button type="button" class="btn bg-info-subtle border border-success text-success" data-bs-toggle="modal" data-bs-target="#LoginModal" id="loginBtn">Đăng nhập</button>*@
-                                <p class="m-0">
-                                    <button class="btn" type="button" data-bs-toggle="collapse" data-bs-target="#collapseMenuInformation" aria-expanded="false" aria-controls="collapseMenuMini">
-                                        <i class="fa-solid fa-user"></i> <i class="fa-solid fa-caret-down"></i>
-                                    </button>
-                                </p>
-                                <div class="collapse border border-1" id="collapseMenuInformation">
-                                    <a href="@Url.Action("TripList", "User")" class="card card-body border-0 text-decoration-none">
-                                        Danh sách chuyến
-                                    </a>
-                                    <a href="#" class="card card-body border-0 text-decoration-none">
-                                        Thông tin cá nhân
-                                    </a>
-                                    <a href="#" class="card card-body border-0 text-decoration-none">
-                                        Đổi mật khẩu
-                                    </a>
-                                </div>
+
+                                @if (Session["Id"] != null)
+                                {
+                                    <p class="m-0">
+                                        <button class="btn" type="button" data-bs-toggle="collapse" data-bs-target="#collapseMenuInformation" aria-expanded="false" aria-controls="collapseMenuMini">
+                                            <i class="fa-solid fa-user"></i> <i class="fa-solid fa-caret-down"></i>
+                                        </button>
+                                    </p>
+                                    <div class="collapse border border-1" id="collapseMenuInformation">
+                                        <a href="@Url.Action("TripList", "User")" class="card card-body border-0 text-decoration-none">
+                                            Danh sách chuyến
+                                        </a>
+                                        <a href="#" class="card card-body border-0 text-decoration-none">
+                                            Thông tin cá nhân
+                                        </a>
+                                        <a href="#" class="card card-body border-0 text-decoration-none">
+                                            Đổi mật khẩu
+                                        </a>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <button type="button" class="btn bg-info-subtle border border-success text-success" data-bs-toggle="modal" data-bs-target="#LoginModal" id="loginButton">Đăng nhập</button>
+                                }
                             </div>
                         </div>
                     </div>
@@ -161,34 +183,40 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form>
-                        <div class="mb-3">
-                            <label for="exampleInputEmail1" class="form-label fw-bold text-secondary">Địa chỉ Email</label>
-                            <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
-                        </div>
-                        <div class="mb-3">
-                            <label for="exampleInputPassword1" class="form-label fw-bold text-secondary">Mật khẩu</label>
-                            <input type="password" class="form-control" id="exampleInputPassword1">
-                        </div>
-                        <div class="mb-3 form-check p-0">
-                            <a href="#" class="form-check-label text-decoration-none text-success fs-7 fw-bold" for="exampleCheck1">Quên mật khẩu?</a>
-                        </div>
-                        <button type="submit" class="btn btn-primary w-100 py-3 bg-success">Đăng nhập</button>
-                        <div class="mt-3 text-center fs-6 d-flex justify-content-center align-items-center">
-                            Bạn chưa là thành viên?
-                            <button type="button" class="fs-6 text-decoration-underline fw-bold text-success p-1 border-0 bg-body" data-bs-toggle="modal" data-bs-target="#RegisterModal">
-                                Đăng ký ngay
-                            </button>
-                        </div>
-                        <div class="row my-3">
-                            <div class="col-6">
-                                <button type="button" class="btn btn-outline-success text-body fs-7 fw-bold d-flex justify-content-center align-items-center w-100"><i class="fa-brands fa-facebook text-primary me-2 fs-5"></i>Facebook</button>
+                    @using (Html.BeginForm("Login", "Home", FormMethod.Post, new { id = "LoginForm" }))
+                    {
+                        @Html.AntiForgeryToken()
+
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                        <form>
+                            <div class="mb-3">
+                                <label for="exampleInputEmail1" class="form-label fw-bold text-secondary">Địa chỉ Email</label>
+                                <input type="email" name="Email" class="form-control" aria-describedby="emailHelp" required>
                             </div>
-                            <div class="col-6">
-                                <button type="button" class="btn btn-outline-success text-body fs-7 fw-bold d-flex justify-content-center align-items-center w-100"><i class="fa-brands fa-google text-danger me-2 fs-5"></i>Google</button>
+                            <div class="mb-3">
+                                <label for="exampleInputPassword1" class="form-label fw-bold text-secondary">Mật khẩu</label>
+                                <input type="password" name="Password" class="form-control" required>
                             </div>
-                        </div>
-                    </form>
+                            <div class="mb-3 form-check p-0">
+                                <a href="#" class="form-check-label text-decoration-none text-success fs-7 fw-bold" for="exampleCheck1">Quên mật khẩu?</a>
+                            </div>
+                            <button type="submit" name="submit" id="btn-Login" class="btn btn-primary w-100 py-3 bg-success">Đăng nhập</button>
+                            <div class="mt-3 text-center fs-6 d-flex justify-content-center align-items-center">
+                                Bạn chưa là thành viên?
+                                <button type="button" class="fs-6 text-decoration-underline fw-bold text-success p-1 border-0 bg-body" data-bs-toggle="modal" data-bs-target="#RegisterModal">
+                                    Đăng ký ngay
+                                </button>
+                            </div>
+                            <div class="row my-3">
+                                <div class="col-6">
+                                    <button type="button" class="btn btn-outline-success text-body fs-7 fw-bold d-flex justify-content-center align-items-center w-100"><i class="fa-brands fa-facebook text-primary me-2 fs-5"></i>Facebook</button>
+                                </div>
+                                <div class="col-6">
+                                    <button type="button" class="btn btn-outline-success text-body fs-7 fw-bold d-flex justify-content-center align-items-center w-100"><i class="fa-brands fa-google text-danger me-2 fs-5"></i>Google</button>
+                                </div>
+                            </div>
+                        </form>
+                    }
                 </div>
             </div>
         </div>
@@ -203,27 +231,33 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form>
-                        <div class="mb-3">
-                            <label for="exampleInputEmail1" class="form-label fw-bold text-secondary">Địa chỉ Email</label>
-                            <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
-                        </div>
-                        <div class="mb-3">
-                            <label for="exampleInputPassword1" class="form-label fw-bold text-secondary">Mật khẩu</label>
-                            <input type="password" class="form-control" id="exampleInputPassword1">
-                        </div>
-                        <div class="mb-3">
-                            <label for="exampleInputPassword1" class="form-label fw-bold text-secondary">Nhập lại mật khẩu</label>
-                            <input type="password" class="form-control" id="exampleInputPassword1">
-                        </div>
-                        <button type="submit" class="btn btn-primary w-100 py-3 bg-success">Đăng ký</button>
-                        <div class="mt-3 text-center fs-6 d-flex justify-content-center align-items-center">
-                            Bạn đã có tài khoản?
-                            <button type="button" class="fs-6 text-decoration-underline fw-bold text-success p-1 border-0 bg-body" data-bs-toggle="modal" data-bs-target="#LoginModal">
-                                Đăng nhập
-                            </button>
-                        </div>
-                    </form>
+                    @using (Html.BeginForm("Register", "Home", FormMethod.Post, new { id = "RegisterForm" }))
+                    {
+                        @Html.AntiForgeryToken()
+
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                        <form id="RegisterForm">
+                            <div class="mb-3">
+                                <label for="exampleInputEmail1" class="form-label fw-bold text-secondary">Địa chỉ Email</label>
+                                <input type="email" name="Email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="exampleInputPassword1" class="form-label fw-bold text-secondary">Mật khẩu</label>
+                                <input type="password" name="Password" class="form-control" id="passwordRegister" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="exampleInputPassword1" class="form-label fw-bold text-secondary">Nhập lại mật khẩu</label>
+                                <input type="password" name="ConfirmPassword" class="form-control" id="passwordConfirmRegister" required>
+                            </div>
+                            <button type="submit" name="submit" class="btn btn-primary w-100 py-3 bg-success">Đăng ký</button>
+                            <div class="mt-3 text-center fs-6 d-flex justify-content-center align-items-center">
+                                Bạn đã có tài khoản?
+                                <button type="button" class="fs-6 text-decoration-underline fw-bold text-success p-1 border-0 bg-body" data-bs-toggle="modal" data-bs-target="#LoginModal">
+                                    Đăng nhập
+                                </button>
+                            </div>
+                        </form>
+                    }
                 </div>
             </div>
         </div>
@@ -233,6 +267,48 @@
     <script src="~/Content/assets/js/bootstrap.bundle.min.js"></script>
     <script src="~/Content/assets/js/main.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+    $(document).ready(function() {
+        $('#RegisterForm').on('submit', function(e) {
+            e.preventDefault();
+            var form = $(this);
+            $.ajax({
+                url: form.attr('action'),
+                type: form.attr('method'),
+                data: form.serialize(),
+                success: function(response) {
+                    if (response.success) {
+                        // Đăng ký thành công, hiển thị thông báo thành công
+                        alert('Đăng ký thành công!');
+                        window.location.href = '@Session["returnUrl"]';
+                    } else {
+                        // Đăng ký không thành công, hiển thị cảnh báo
+                        alert(response.message);
+                    }
+                }
+            });
+        });
+
+        $('#LoginForm').on('submit', function(e) {
+            e.preventDefault();
+            var form = $(this);
+            $.ajax({
+                url: form.attr('action'),
+                type: form.attr('method'),
+                data: form.serialize(),
+                success: function(response) {
+                    if (response.success) {
+                        // Xử lý đăng nhập thành công
+                        window.location.href = '@Session["returnUrl"]';
+                    } else {
+                        // Xử lý đăng nhập không thành công, hiển thị cảnh báo
+                        alert(response.message);
+                    }
+                }
+            });
+        });
+    });
+    </script>
     @RenderSection("scripts", required: false)
 </body>
 </html>

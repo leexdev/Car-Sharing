@@ -22,57 +22,104 @@
                 <div class="information">
                     <div class="row">
                         <div class="col-lg-4">
-                            <div class="image-container">
-                                <img class="w-100" src="~/Content/assets/img/NAck_WBdKcVY88Th9rGAIQ.jpg" alt="">
-                                <div class="update-notification text-center"><i class="fa-solid fa-camera"></i> Cập nhật</div>
+                                <div class="image-container">
+                                    <img class="w-100" src="@Model.User.Avatar" alt="">
+                                    <div class="update-notification text-center">
+                                        <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#updateAvatar">
+                                            <i class="fa-solid fa-pen-to-square"></i> Cập nhật
+                                        </button>
+                                        @using (Html.BeginForm("UpdateInformation", "UserInfo", FormMethod.Post, new { enctype = "multipart/form-data" }))
+                                        {
+                                            @Html.AntiForgeryToken()
+                                            @Html.Hidden("UserId", Session["Id"])
+                                            <div class="modal fade text-dark" id="updateAvatar" tabindex="-1" aria-hidden="true" style="margin-top: 100px;">
+                                                <div class="modal-dialog">
+                                                    <div class="modal-content">
+                                                        <div class="modal-header">
+                                                            <h1 class="modal-title fs-5 fw-bold">Cập nhật ảnh đại diện</h1>
+                                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                                        </div>
+                                                        <div class="modal-body">
+                                                            <div class="mb-3">
+                                                                <div class="row">
+                                                                    <div class="col-12 d-flex justify-content-center mb-4">
+                                                                        <div id="imagePreview" style="width: 200px; height:200px"></div>
+                                                                    </div>
+                                                                    <div class="col-12 d-flex justify-content-center">
+                                                                        <input type="file" id="ImageUpLoad" class="mb-3 form-control" name="ImageUpLoad" style="width: 105px" required />
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="modal-footer">
+                                                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Quay lại</button>
+                                                            <button type="submit" name="submit" class="btn btn-success">Lưu thay đổi</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
                             </div>
-                        </div>
                         <div class="col-lg-8">
                             <div class="user-name mb-3">
                                 <div class="fw-bold">Họ & Tên</div>
-                                <div>Nguyễn Văn A</div>
+                                <div>@Model.User.FullName</div>
                             </div>
                             <div class="phone-user mb-3">
                                 <div class="fw-bold">Số điện thoại</div>
-                                <div>1234</div>
+                                <div>@Model.User.Phone</div>
                             </div>
                             <div class="user-email mb-3">
                                 <div class="fw-bold">Địa chỉ Email</div>
-                                <div>abc@gmail.com</div>
+                                <div>@Model.User.Email</div>
+                            </div>
+                            <div class="user-email mb-3">
+                                <div class="fw-bold">Địa chỉ</div>
+                                <div>@Model.User.Address</div>
                             </div>
                             <div class="user-email">
                                 <button type="button" class="btn btn-success bg-white text-success" data-bs-toggle="modal" data-bs-target="#updateUserModal">
                                     <i class="fa-solid fa-pen-to-square"></i> Chỉnh sửa
                                 </button>
-
-                                <div class="modal fade" id="updateUserModal" tabindex="-1" aria-hidden="true" style="margin-top: 100px;">
-                                    <div class="modal-dialog">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h1 class="modal-title fs-5 fw-bold">Thay đổi thông tin cá nhân</h1>
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                            </div>
-                                            <div class="modal-body">
-                                                <div class="mb-3">
-                                                    <label for="name" class="form-label">Họ tên</label>
-                                                    <input type="text" class="form-control" id="name">
+                                @using (Html.BeginForm("UpdateInformation", "UserInfo", FormMethod.Post))
+                                {
+                                    @Html.AntiForgeryToken()
+                                    @Html.Hidden("UserId", Session["Id"])
+                                    <div class="modal fade" id="updateUserModal" tabindex="-1" aria-hidden="true" style="margin-top: 100px;">
+                                        <div class="modal-dialog">
+                                            <div class="modal-content">
+                                                <div class="modal-header">
+                                                    <h1 class="modal-title fs-5 fw-bold">Thay đổi thông tin cá nhân</h1>
+                                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                                 </div>
-                                                <div class="mb-3">
-                                                    <label for="phone" class="form-label">Số điện thoại</label>
-                                                    <input type="number" class="form-control" id="phone">
+                                                <div class="modal-body">
+                                                    <div class="mb-3">
+                                                        <label for="name" class="form-label">Họ tên</label>
+                                                        <input type="text" class="form-control" id="name" name="FullName" value="@Model.User.FullName">
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label for="phone" class="form-label">Số điện thoại</label>
+                                                        <input type="number" class="form-control" id="phone" name="Phone" value="@Model.User.Phone">
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label for="email" class="form-label">Địa chỉ Email</label>
+                                                        <input type="email" class="form-control" id="email" name="Email" value="@Model.User.Email">
+                                                    </div>
+                                                    <div class="mb-3">
+                                                        <label for="address" class="form-label">Địa chỉ</label>
+                                                        <input type="text" class="form-control" id="address" name="Address" value="@Model.User.Address">
+                                                    </div>
                                                 </div>
-                                                <div class="mb-3">
-                                                    <label for="email" class="form-label">Địa chỉ Email</label>
-                                                    <input type="email" class="form-control" id="email">
+                                                <div class="modal-footer">
+                                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Quay lại</button>
+                                                    <button type="submit" name="submit" class="btn btn-primary">Lưu thay đổi</button>
                                                 </div>
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Quay lại</button>
-                                                <button type="button" class="btn btn-primary">Lưu thay đổi</button>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+                                }
                             </div>
                         </div>
                     </div>
@@ -81,3 +128,21 @@
         </div>
     </div>
 </div>
+
+@section scripts
+{
+    <script>
+        $(document).ready(function () {
+            $("#ImageUpLoad").change(function () {
+                var file = this.files[0];
+                var reader = new FileReader();
+
+                reader.onload = function (e) {
+                    $("#imagePreview").html('<img style="width:100%; height:100%" src="' + e.target.result + '" alt="Xem trước hình ảnh" />');
+                };
+
+                reader.readAsDataURL(file);
+            });
+        });
+    </script>
+}

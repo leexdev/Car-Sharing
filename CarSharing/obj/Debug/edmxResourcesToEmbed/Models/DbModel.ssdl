@@ -46,7 +46,6 @@
       <PropertyRef Name="UserId" />
     </Key>
     <Property Name="UserId" Type="uniqueidentifier" Nullable="false" />
-    <Property Name="Username" Type="nvarchar" MaxLength="50" Nullable="false" />
     <Property Name="Password" Type="nvarchar" MaxLength="50" Nullable="false" />
     <Property Name="Avatar" Type="nvarchar(max)" />
     <Property Name="Email" Type="nvarchar" MaxLength="100" Nullable="false" />

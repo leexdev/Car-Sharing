@@ -59,12 +59,7 @@
                     </div>
                     <div class="col-lg-2">
                         <select id="Vehicle_VariantId" name="Vehicle.VariantId" class="form-select text-body-tertiary border-0" required>
-                            <option disabled selected>Chọn loại hộp số</option>
-
-                            @foreach (var vehicleType in Model.ListVehicleVariants)
-                            {
-                                <option value="@vehicleType.VariantId">@vehicleType.VariantName</option>
-                            }
+                            <option disabled selected>Chọn loại xe trước</option>
                         </select>
                     </div>
                     <div class="col-lg-2">
@@ -221,6 +216,7 @@
                     },
                 });
             });
+            
 
             $("#ProvinceCode").change(function () {
                 var selectedProvinceCode = $(this).val();
@@ -263,6 +259,7 @@
                     },
                     success: function (res) {
                         $("div#filteredVehicleList").html(res);
+                        history.pushState({}, '', `/Search?currentFilter=&page=&vehicleTypeId=${vehicleTypeId}&variantId=${variantId}&brandId=${brandId}&provinceCode=${provinceCode}&districtCode=${districtCode}`);
                     },
                 });
             });

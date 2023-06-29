@@ -93,6 +93,7 @@ namespace CarSharing.Controllers
 
         public ActionResult SearchVehicle(string currentFilter, int? page, Guid? vehicleTypeId, Guid? variantId, Guid? brandId, int? provinceCode, int? districtCode)
         {
+            Session["returnUrl"] = Request.Url.ToString();
             ViewBag.CurrentFilter = currentFilter;
             ViewBag.vehicleTypeId = vehicleTypeId;
             ViewBag.variantId = variantId;
@@ -136,6 +137,7 @@ namespace CarSharing.Controllers
             }
 
             objVehicleModel.ListVehicles = listVehicle;
+
             int pagesize = 5;
             int pagenumber = page ?? 1;
             var pagedVehicles = objVehicleModel.ListVehicles.ToPagedList(pagenumber, pagesize);

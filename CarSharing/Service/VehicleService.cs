@@ -5,6 +5,8 @@ using System.Linq;
 using CarSharing.Helpers;
 using System.Data.Entity;
 using System.ComponentModel;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace CarSharing.Service
 {
@@ -82,6 +84,11 @@ namespace CarSharing.Service
         public Vehicle GetVehicle(Guid id)
         {
             return db.Vehicles.SingleOrDefault(vehicle => vehicle.VehicleId == id && !vehicle.isDeleted);
+        }
+
+        public User GetUser(Guid id)
+        {
+            return db.Users.SingleOrDefault(user => user.UserId == id && !user.isDeleted);
         }
 
         public List<Review> GetReviews()
@@ -329,6 +336,42 @@ namespace CarSharing.Service
             db.SaveChanges();
         }
 
+        public void AddUser(User _user)
+        {
+            db.Users.Add(_user);
+            db.Configuration.ValidateOnSaveEnabled = false;
+            db.SaveChanges();
+        }
+
+        public void UpdateUser(User _user)
+        {
+            var existingUser = db.Users.Find(_user.UserId);
+
+            if (existingUser != null)
+            {
+                existingUser.FullName = _user.FullName;
+                existingUser.Phone = _user.Phone;
+                existingUser.Email = _user.Email;
+                existingUser.Address = _user.Address;
+
+                db.Configuration.ValidateOnSaveEnabled = false;
+                db.SaveChanges();
+            }
+        }
+
+        public void UpdateAvatar(User _user)
+        {
+            var existingUser = db.Users.Find(_user.UserId);
+
+            if (existingUser != null)
+            {
+                existingUser.Avatar = _user.Avatar;
+
+                db.Configuration.ValidateOnSaveEnabled = false;
+                db.SaveChanges();
+            }
+        }
+
         public Province GetProvinceByCode(int provinceCode)
         {
             var province = db.Provinces.FirstOrDefault(p => p.Code == provinceCode);
@@ -339,6 +382,28 @@ namespace CarSharing.Service
         {
             var district = db.Districts.FirstOrDefault(p => p.code == districtCode);
             return district;
+        }
+
+        public User CheckEmailExists(string email)
+        {
+            return db.Users.FirstOrDefault(u => u.Email == email && !u.isDeleted);
+        }
+
+        public string GetMD5(string str)
+        {
+            using (MD5 md5 = MD5.Create())
+            {
+                byte[] inputBytes = Encoding.UTF8.GetBytes(str);
+                byte[] hashBytes = md5.ComputeHash(inputBytes);
+
+                StringBuilder builder = new StringBuilder();
+                for (int i = 0; i < hashBytes.Length; i++)
+                {
+                    builder.Append(hashBytes[i].ToString("x2"));
+                }
+
+                return builder.ToString();
+            }
         }
     }
 }

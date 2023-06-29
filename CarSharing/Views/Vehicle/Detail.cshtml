@@ -93,7 +93,7 @@
                     </div>
                 </div>
                 <a href="@Url.Action("Index", "Pay", new {id = Model.Vehicle.VehicleId })">
-                    <button type="button" class="btn btn-success w-100">Đặt xe</button>
+                    <button type="button" class="btn btn-success w-100" onclick="return checkSession()">Đặt xe</button>
                 </a>
             </div>
             <div class="col-lg-8">
@@ -149,5 +149,20 @@
 
 @section scripts {
     <script src="~/Content/assets/js/detail.js"></script>
+    <script>
+    function checkSession() {
+        var id = "@(Session["Id"] ?? "")";
+        if (id === "") {
+            alert("Vui lòng đăng nhập trước!");
+            shouldShowModal = false;
+
+            // Tự động click vào nút "Đăng nhập"
+            document.getElementById("loginButton").click();
+
+            return false;
+        }
+        return true;
+    }
+    </script>
 }
 

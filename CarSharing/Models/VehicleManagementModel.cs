@@ -16,6 +16,7 @@ namespace CarSharing.Models
         public VehicleType VehicleType { get; set; }
         public VehicleVariant VehicleVariant { get; set; }
         public VehicleBrand VehicleBrand { get; set; }
+        public User User{ get; set; }
         public Vehicle Vehicle { get; set; }
         public Province Province { get; set; }
         public District District { get; set; }

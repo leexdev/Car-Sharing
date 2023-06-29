@@ -7,13 +7,12 @@ GO
 -- Tạo bảng Users (Người dùng)
 CREATE TABLE Users (
     UserId UNIQUEIDENTIFIER DEFAULT NEWID() PRIMARY KEY,
-    Username NVARCHAR(50) NOT NULL,
-    Password NVARCHAR(50) NOT NULL,
-	Avatar NVARCHAR(MAX) DEFAULT N'/Content/assets/img/defaultuser.jpg',
     Email NVARCHAR(100) NOT NULL,
-    FullName NVARCHAR(100) DEFAULT N'',
-    Phone NVARCHAR(20) DEFAULT N'',
-    Address NVARCHAR(200) DEFAULT N'',
+    Password NVARCHAR(50) NOT NULL,
+	Avatar NVARCHAR(MAX) NOT NULL,
+    FullName NVARCHAR(100),
+    Phone NVARCHAR(20),
+    Address NVARCHAR(200),
 	Role NVARCHAR(20) NOT NULL DEFAULT N'user',
 	isDeleted BIT NOT NULL DEFAULT 0
 );
@@ -21,20 +20,18 @@ GO
 
 -- Tạo bảng Provinces (Tỉnh)
 CREATE TABLE Province (
-    ProvinceId UNIQUEIDENTIFIER DEFAULT NEWID() PRIMARY KEY,
-    ProvinceName NVARCHAR(100) NOT NULL,
-    isDeleted BIT NOT NULL DEFAULT 0
+    Code INT NOT NULL PRIMARY KEY,
+    Name NVARCHAR(100) NOT NULL,
 );
 GO
 
 -- Tạo bảng Districts (Huyện)
 CREATE TABLE District (
-    DistrictId UNIQUEIDENTIFIER DEFAULT NEWID() PRIMARY KEY,
-    DistrictName NVARCHAR(100) NOT NULL,
-    ProvinceId UNIQUEIDENTIFIER NOT NULL,
-    isDeleted BIT NOT NULL DEFAULT 0,
+    code INT NOT NULL PRIMARY KEY,
+    name NVARCHAR(100) NOT NULL,
+    province_code UNIQUEIDENTIFIER NOT NULL,
     
-    FOREIGN KEY (ProvinceId) REFERENCES Province(ProvinceId)
+    FOREIGN KEY (province_code) REFERENCES Province(Code)
 );
 GO
 

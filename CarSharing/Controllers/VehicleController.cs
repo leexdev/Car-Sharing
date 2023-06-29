@@ -19,6 +19,7 @@ namespace CarSharing.Controllers
         }
         public ActionResult Detail(Guid id)
         {
+            Session["returnUrl"] = Request.Url.ToString();
             VehicleManagementModel objDetailModel = vehicleService.GetDetailModel();
             objDetailModel.Vehicle = vehicleService.GetVehicles().Where(n => n.VehicleId == id).FirstOrDefault();
 

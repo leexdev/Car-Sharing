@@ -36,5 +36,69 @@ namespace CarSharing.Controllers
 
             return Json(provincesData, JsonRequestBehavior.AllowGet);
         }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Register(User user)
+        {
+            var check = vehicleService.CheckEmailExists(user.Email);
+            if (check != null)
+            {
+                TempData["ErrorMessage"] = "Email đã tồn tại!";
+                return Json(new { success = false, message = TempData["ErrorMessage"] });
+            }
+            if (user.Password != user.ConfirmPassword)
+            {
+                TempData["ErrorMessage"] = "Mật khẩu và mật khẩu xác nhận không khớp!";
+                return Json(new { success = false, message = TempData["ErrorMessage"] });
+            }
+            user.UserId = Guid.NewGuid();
+            user.Avatar = "/Content/img/user.png";
+            user.Role = "user";
+            user.Password = vehicleService.GetMD5(user.Password);
+            user.isDeleted = false;
+
+            vehicleService.AddUser(user);
+            TempData["SuccessMessage"] = "Đăng ký thành công!";
+            return Json(new { success = true });
+        }
+
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Login(User user)
+        {
+            ModelState.Remove("User.ConfirmPassword");
+            var data = vehicleService.CheckEmailExists(user.Email);
+            if (data == null || data.Password != vehicleService.GetMD5(user.Password))
+            {
+                TempData["ErrorMessage"] = "Tên đăng nhập hoặc mật khẩu không chính xác!";
+                return Json(new { success = false, message = TempData["ErrorMessage"] });
+            }
+            else
+            {
+                Session["Id"] = data.UserId;
+                Session["Name"] = data.FullName;
+                Session["Avatar"] = data.Avatar;
+                Session["Email"] = data.Email;
+                Session["Phone"] = data.Phone;
+                Session["Address"] = data.Address;
+                Session["Role"] = data.Role;
+                return Json(new { success = true });
+            }
+        }
+
+
+        public ActionResult Logout()
+        {
+            string returnUrl = (string)Session["returnUrl"];
+            if (!string.IsNullOrEmpty(returnUrl))
+            {
+                Session.Clear();
+                return Redirect(returnUrl);
+            }
+            Session.Clear();
+            return RedirectToAction("Index");
+        }
     }
 }

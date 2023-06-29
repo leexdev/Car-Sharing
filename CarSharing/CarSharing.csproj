@@ -160,6 +160,7 @@
     <Compile Include="Models\Booking.cs">
       <DependentUpon>DbModel.tt</DependentUpon>
     </Compile>
+    <Compile Include="Models\CustomAuthorizeAttribute.cs" />
     <Compile Include="Models\DbModel.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -412,6 +413,7 @@
     <Content Include="Content\assets\img\pexels-tiana-614484.jpg" />
     <Content Include="Content\assets\img\RaJDNmXOsnc0NfWqqCXZWA.jpg" />
     <Content Include="Content\assets\img\saigon.jpg" />
+    <Content Include="Content\assets\img\user.png" />
     <Content Include="Content\assets\img\vungtau.jpg" />
     <Content Include="Content\assets\js\bootstrap.bundle.js" />
     <Content Include="Content\assets\js\bootstrap.bundle.min.js" />
@@ -861,7 +863,6 @@
     </Content>
     <Content Include="Views\Web.config" />
     <Content Include="Views\_ViewStart.cshtml" />
-    <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Search\Index.cshtml" />
@@ -925,13 +926,6 @@
     <Content Include="Areas\Admin\Content\news-ticker-controls-acme\README.md" />
     <Content Include="Areas\Admin\Views\_ViewStart.cshtml" />
     <Content Include="Areas\Admin\Views\Vehicle\Index.cshtml" />
-    <EntityDeploy Include="Models\DbModel.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>DbModel.Designer.cs</LastGenOutput>
-    </EntityDeploy>
-    <Content Include="Models\DbModel.edmx.diagram">
-      <DependentUpon>DbModel.edmx</DependentUpon>
-    </Content>
     <Content Include="Content\plugin\ckeditor\plugins\scayt\CHANGELOG.md" />
     <Content Include="Content\plugin\ckeditor\plugins\scayt\LICENSE.md" />
     <Content Include="Content\plugin\ckeditor\plugins\scayt\README.md" />
@@ -952,6 +946,13 @@
     <Content Include="Areas\User\Views\web.config" />
     <Content Include="Areas\User\Views\_ViewStart.cshtml" />
     <Content Include="Areas\User\Views\Shared\_Layout.cshtml" />
+    <EntityDeploy Include="Models\DbModel.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>DbModel.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <Content Include="Models\DbModel.edmx.diagram">
+      <DependentUpon>DbModel.edmx</DependentUpon>
+    </Content>
     <None Include="packages.config" />
     <Content Include="Views\UserInfo\TripList.cshtml" />
     <Content Include="Views\UserInfo\Information.cshtml" />
