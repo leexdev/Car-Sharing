@@ -1,6 +1,6 @@
-﻿    @model CarSharing.Models.VehicleManagementModel
+﻿@model CarSharing.Models.VehicleManagementModel
 
-@{ 
+@{
     ViewBag.Title = "Danh sách chuyến";
     ViewBag.ActionCurrent = "TripList";
     ViewBag.ControllerCurrent = "UserInfo";
@@ -23,15 +23,18 @@
                     <div class="nav-select">
                         <ul class="nav nav-tabs">
                             <li class="nav-item">
-                                <button class="nav-link text-succes active" value="1">Sắp tới</button>
+                                <button class="nav-link text-success active" data-status="1">Chờ duyệt</button>
                             </li>
                             <li class="nav-item">
-                                <button class="nav-link text-dark" value="2">Hoàn tất</button>
+                                <button class="nav-link text-dark" data-status="2">Đã duyệt</button>
+                            </li>
+                            <li class="nav-item">
+                                <button class="nav-link text-dark" data-status="3">Đã hoàn tất</button>
                             </li>
                         </ul>
                     </div>
 
-                    @Html.Partial("_ListBooking")
+                    @Html.Partial("_ListOrder")
                 </div>
             </div>
         </div>
@@ -49,18 +52,18 @@
                 var savedStatus = localStorage.getItem("selectedStatus");
 
                 $.ajax({
-                    url: '/UserInfo/TripListType',
+                    url: '/UserInfo/ListOrderType',
                     type: 'GET',
                     data: { status: savedStatus, vehicleTypeId: selectedVehicleTypeId },
                     success: function (res) {
                         $("div#list-booking").html(res);
-                        history.pushState({}, '', `/UserInfo/TripList?status=${savedStatus}&vehicleTypeId=${selectedVehicleTypeId}`);
+                        history.pushState({}, '', `/UserInfo/ListOrder?status=${savedStatus}&vehicleTypeId=${selectedVehicleTypeId}`);
                     },
                 });
             });
 
             $(".nav-link").click(function () {
-                var selectedStatus = $(this).val();
+                var selectedStatus = $(this).data("status");
                 localStorage.setItem("selectedStatus", selectedStatus);
 
                 var savedVehicleTypeId = localStorage.getItem("selectedVehicleTypeId");
@@ -69,12 +72,12 @@
                 $(this).removeClass("text-dark").addClass("text-success active");
 
                 $.ajax({
-                    url: '/UserInfo/TripListType',
+                    url: '/UserInfo/ListOrderType',
                     type: 'GET',
                     data: { status: selectedStatus, vehicleTypeId: savedVehicleTypeId },
                     success: function (res) {
                         $("div#list-booking").html(res);
-                        history.pushState({}, '', `/UserInfo/TripList?status=${selectedStatus}&vehicleTypeId=${savedVehicleTypeId}`);
+                        history.pushState({}, '', `/UserInfo/ListOrder?status=${selectedStatus}&vehicleTypeId=${savedVehicleTypeId}`);
                     },
                 });
             });

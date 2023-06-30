@@ -17,6 +17,7 @@ namespace CarSharing.Controllers
             vehicleService = new VehicleService();
         }
 
+        [CustomAuthorize(Roles = "admin, partner, user")]
         public ActionResult Index(Guid id, DateTime startTime, DateTime endTime)
         {
             var vehicle = vehicleService.GetVehicle(id);
@@ -44,11 +45,13 @@ namespace CarSharing.Controllers
         }
 
         [HttpPost]
+        [CustomAuthorize(Roles = "admin, partner, user")]
         public ActionResult Pay(Booking booking, Guid vehicleId)
         {
             booking.BookingId = Guid.NewGuid();
             booking.VehicleId = vehicleId;
             booking.UserId = new Guid(Session["Id"].ToString());
+            booking.Email = (Session["Email"].ToString());
             booking.StartTime = (DateTime)Session["StartTime"];
             booking.EndTime = (DateTime)Session["EndTime"];
             booking.Status = "Chờ duyệt";

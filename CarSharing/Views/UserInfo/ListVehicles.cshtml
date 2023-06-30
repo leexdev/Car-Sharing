@@ -9,7 +9,9 @@
             @Html.Partial("_UserInfo")
             <div class="col-lg-8 mt-3 mt-lg-0">
                 <div style="width: 150px">
-                    <button type="button" class="btn btn-success w-100 mt-lg-0">Thêm xe</button>
+                    <a href="@Url.Action("CreateVehicle", "UserInfo")">
+                        <button type="button" class="btn btn-success w-100 mt-lg-0">Thêm xe</button>
+                    </a>
                 </div>
                 <div class="mt-3" id="list-booking">
                     @foreach (var vehicle in Model.ListVehicles)
@@ -43,8 +45,12 @@
                                     <a href="@Url.Action("Detail", "Vehicle", new { id = vehicle.VehicleId})">
                                         <button type="button" class="btn btn-success w-100 mb-2 mt-2 mt-lg-0">Chi tiết</button>
                                     </a>
-                                    <button type="button" class="btn btn-warning w-100 mb-2 mt-2 mt-lg-0">Cập nhật</button>
-                                    <button type="button" class="btn btn-danger w-100 mb-2 mt-2 mt-lg-0">Xóa</button>
+                                    <a href="@Url.Action("EditVehicle", "UserInfo", new { id = vehicle.VehicleId})">
+                                        <button type="button" class="btn btn-warning w-100 mb-2 mt-2 mt-lg-0">Cập nhật</button>
+                                    </a>
+                                    <button type="button" class="delete btn btn-danger w-100 mb-2 mt-2 mt-lg-0" data-bs-toggle="modal" data-bs-target="#deleteVehicleModal" data-id="@vehicle.VehicleId">
+                                        Xóa
+                                    </button>
                                 </div>
                             </div>
                         </div>
@@ -55,9 +61,36 @@
     </div>
 </div>
 
+<div class="modal fade" id="deleteVehicleModal" tabindex="-1"aria-hidden="true" style="margin-top: 160px">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Xóa xe</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Bạn có muốn xóa xe này không?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Trở về</button>
+                <form id="deleteForm" action="@Url.Action("DeleteVehicle", "UserInfo")" method="post" enctype="multipart/form-data">
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" name="id" id="deleteId" value="" />
+                    <button type="submit" class="btn btn-success">Xóa</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
 @section scripts
 {
     <script>
+        $('.delete').click(function () {
+            var vehicleId = $(this).data('id');
+            $('#deleteId').val(vehicleId);
+        });
+
         $(document).ready(function () {
             $("#VehicleTypeId").change(function () {
                 var selectedVehicleTypeId = $(this).val();

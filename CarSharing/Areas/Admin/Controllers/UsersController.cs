@@ -21,6 +21,7 @@ namespace CarSharing.Areas.Admin.Controllers
             vehicleService = new VehicleService();
         }
 
+        [CustomAuthorize(Roles = "admin")]
         public async Task<ActionResult> Index(string currentFilter, string searchString, int? page)
         {
             var objUserModel = vehicleService.GetUserModel();
@@ -57,6 +58,7 @@ namespace CarSharing.Areas.Admin.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [ValidateInput(false)]
+        [CustomAuthorize(Roles = "admin")]
         public ActionResult Create(User user, HttpPostedFileBase ImageUpLoad)
         {
             user.UserId = Guid.NewGuid();
@@ -68,6 +70,7 @@ namespace CarSharing.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        [CustomAuthorize(Roles = "admin")]
         public ActionResult CheckEmailExists(string email)
         {
             var emailExists = vehicleService.CheckEmailExists(email);
@@ -86,6 +89,7 @@ namespace CarSharing.Areas.Admin.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [ValidateInput(false)]
+        [CustomAuthorize(Roles = "admin")]
         //[CustomAuthorize(Roles = "admin")]
         public ActionResult Edit(User user)
         {
@@ -96,6 +100,7 @@ namespace CarSharing.Areas.Admin.Controllers
 
 
         [HttpPost]
+        [CustomAuthorize(Roles = "admin")]
         public ActionResult Delete(Guid id)
         {
             var user = vehicleService.GetUser(id);
@@ -108,6 +113,8 @@ namespace CarSharing.Areas.Admin.Controllers
             return RedirectToAction("Index");
         }
 
+
+        [CustomAuthorize(Roles = "admin")]
         public async Task<ActionResult> Partner(string currentFilter, string searchString, int? page)
         {
             var objUserModel = vehicleService.GetUserModel();
@@ -147,6 +154,7 @@ namespace CarSharing.Areas.Admin.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [ValidateInput(false)]
+        [CustomAuthorize(Roles = "admin")]
         public ActionResult AddPartner(User user)
         {
             var partner = vehicleService.GetUser(user.UserId);
@@ -157,6 +165,7 @@ namespace CarSharing.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        [CustomAuthorize(Roles = "admin")]
         public ActionResult DeletePartner(Guid id)
         {
             var user = vehicleService.GetUser(id);

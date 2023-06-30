@@ -71,6 +71,11 @@ namespace CarSharing.Service
             return db.Bookings.Where(booking => booking.UserId == userId && !booking.isDeleted).ToList();
         }
 
+        public List<Booking> GetOrders(Guid userId)
+        {
+            return db.Bookings.Where(order => order.Vehicle.UserId == userId && !order.isDeleted).ToList();
+        }
+
         public Booking GetBooking(Guid bookingId)
         {
             return db.Bookings.Where(booking => booking.BookingId == bookingId && !booking.isDeleted).FirstOrDefault();
@@ -447,6 +452,19 @@ namespace CarSharing.Service
             db.Bookings.Add(booking);
             db.Configuration.ValidateOnSaveEnabled = false;
             db.SaveChanges();
+        }
+
+        public void UpdateBooking(Booking booking)
+        {
+            var existingBooking = db.Bookings.Find(booking.BookingId);
+
+            if (existingBooking != null)
+            {
+                existingBooking.Status = booking.Status;
+
+                db.Configuration.ValidateOnSaveEnabled = false;
+                db.SaveChanges();
+            }
         }
 
         public Province GetProvinceByCode(int provinceCode)

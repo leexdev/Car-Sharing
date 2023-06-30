@@ -25,6 +25,7 @@ namespace CarSharing.Areas.Admin.Controllers
             _apiService = new ApiService();
         }
 
+        [CustomAuthorize(Roles = "admin")]
         public async Task<ActionResult> Index(string currentFilter, string searchString, int? page)
         {
             var objVehicleModel = vehicleService.GetHomeModel();
@@ -59,6 +60,8 @@ namespace CarSharing.Areas.Admin.Controllers
             return View(objVehicleModel);
         }
 
+
+        [CustomAuthorize(Roles = "admin")]
         public JsonResult GetVariants(Guid vehicleTypeId)
         {
             var variants = vehicleService.GetVariantsByVehicleType(vehicleTypeId);
@@ -72,6 +75,8 @@ namespace CarSharing.Areas.Admin.Controllers
             return Json(variantsData, JsonRequestBehavior.AllowGet);
         }
 
+
+        [CustomAuthorize(Roles = "admin")]
         public JsonResult GetBrands(Guid vehicleTypeId)
         {
             var brands = vehicleService.GetBrandsByVehicleType(vehicleTypeId);
@@ -85,6 +90,7 @@ namespace CarSharing.Areas.Admin.Controllers
             return Json(brandsData, JsonRequestBehavior.AllowGet);
         }
 
+        [CustomAuthorize(Roles = "admin")]
         public async Task<JsonResult> GetDistrics(int provinceCode)
         {
             var districts = await _apiService.GetDistrictsByProvinceAsync(provinceCode);
@@ -102,6 +108,7 @@ namespace CarSharing.Areas.Admin.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [ValidateInput(false)]
+        [CustomAuthorize(Roles = "admin")]
         public ActionResult Create(Vehicle vehicle, District district, Province province, HttpPostedFileBase ImageUpLoad)
         {
             if (ModelState.IsValid)
@@ -147,7 +154,7 @@ namespace CarSharing.Areas.Admin.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [ValidateInput(false)]
-        //[CustomAuthorize(Roles = "admin")]
+        [CustomAuthorize(Roles = "admin")]
         public ActionResult Edit(Vehicle vehicle, Province province, District district, HttpPostedFileBase ImageUpLoad)
         {
             var existingProvince = vehicleService.GetProvinceByCode(province.Code);
@@ -191,6 +198,7 @@ namespace CarSharing.Areas.Admin.Controllers
 
 
         [HttpPost]
+        [CustomAuthorize(Roles = "admin")]
         public ActionResult Delete(Guid id)
         {
             var vehicle = vehicleService.GetVehicle(id);
@@ -206,6 +214,7 @@ namespace CarSharing.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        [CustomAuthorize(Roles = "admin")]
         public ActionResult UploadImage(HttpPostedFileBase upload)
         {
             if (upload != null && upload.ContentLength > 0)

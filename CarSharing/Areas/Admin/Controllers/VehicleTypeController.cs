@@ -20,6 +20,7 @@ namespace CarSharing.Areas.Admin.Controllers
             vehicleService = new VehicleService();
         }
 
+        [CustomAuthorize(Roles = "admin")]
         public async Task<ActionResult> Index(string currentFilter, string searchString, int? page)
         {
             var objVehicleTypeModel = vehicleService.GetHomeModel();
@@ -56,6 +57,7 @@ namespace CarSharing.Areas.Admin.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [ValidateInput(false)]
+        [CustomAuthorize(Roles = "admin")]
         public ActionResult Create(VehicleType vehicleType)
         {
 
@@ -69,7 +71,7 @@ namespace CarSharing.Areas.Admin.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [ValidateInput(false)]
-        //[CustomAuthorize(Roles = "admin")]
+        [CustomAuthorize(Roles = "admin")]
         public ActionResult Edit(VehicleType vehicleType)
         {
             vehicleService.UpdateVehicleType(vehicleType);
@@ -79,6 +81,7 @@ namespace CarSharing.Areas.Admin.Controllers
 
 
         [HttpPost]
+        [CustomAuthorize(Roles = "admin")]
         public ActionResult Delete(Guid id)
         {
             var vehicleType = vehicleService.GetVehicleType(id);

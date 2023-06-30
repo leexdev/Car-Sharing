@@ -1,11 +1,12 @@
-﻿@if (TempData["Message"] != null)
+﻿@if (Session["SuccessMessage"] != null)
 {
+    var successMessage = Session["SuccessMessage"] as string;
+    Session.Remove("SuccessMessage");
     <script>
-        var errorMessage = "@Html.Raw(TempData["Message"])";
-        alert(errorMessage);
+        var successMessage = "@Html.Raw(successMessage)";
+        alert(successMessage);
     </script>
 }
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -280,6 +281,8 @@
     <script src="~/Content/assets/js/bootstrap.bundle.min.js"></script>
     <script src="~/Content/assets/js/main.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="~/Content/plugin/ckeditor/ckeditor.js"></script>
+
     <script>
     $(document).ready(function() {
         $('#RegisterForm').on('submit', function(e) {

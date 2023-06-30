@@ -12,6 +12,6 @@
     "\\CarSharing\\Views\\Shared",
     "\\CarSharing\\Views\\Vehicle"
   ],
-  "SelectedNode": "\\CarSharing\\Web.config",
+  "SelectedNode": "\\CarSharing\\Views\\Vehicle\\Detail.cshtml",
   "PreviewInSolutionExplorer": false
 }

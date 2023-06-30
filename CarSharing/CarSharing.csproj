@@ -964,6 +964,9 @@
     <Content Include="Views\Shared\_UserInfo.cshtml" />
     <Content Include="Views\UserInfo\ListVehicles.cshtml" />
     <Content Include="Views\UserInfo\CreateVehicle.cshtml" />
+    <Content Include="Views\UserInfo\EditVehicle.cshtml" />
+    <Content Include="Views\Shared\_ListOrder.cshtml" />
+    <Content Include="Views\UserInfo\ListOrder.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

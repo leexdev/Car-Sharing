@@ -14,6 +14,7 @@ namespace CarSharing.Controllers
             vehicleService = new VehicleService();
         }
 
+        [CustomAuthorize(Roles = "user")]
         public ActionResult Index()
         {
             var userId = new Guid(Session["Id"].ToString());
@@ -25,6 +26,7 @@ namespace CarSharing.Controllers
         }
 
         [HttpPost]
+        [CustomAuthorize(Roles = "user")]
         public ActionResult SendPartner(User user)
         {
             user.UserId = (Guid)Session["Id"];

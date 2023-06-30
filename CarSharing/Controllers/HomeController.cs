@@ -91,12 +91,6 @@ namespace CarSharing.Controllers
 
         public ActionResult Logout()
         {
-            string returnUrl = (string)Session["returnUrl"];
-            if (!string.IsNullOrEmpty(returnUrl))
-            {
-                Session.Clear();
-                return Redirect(returnUrl);
-            }
             Session.Clear();
             return RedirectToAction("Index");
         }
