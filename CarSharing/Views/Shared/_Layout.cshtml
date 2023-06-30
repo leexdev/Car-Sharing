@@ -28,9 +28,12 @@
                     <a href="@Url.Action("Index", "Home")"><img src="~/Content/assets/img/logo.png" alt="Logo" class="img-fluid"></a>
                 </div>
                 <div class="col-5 col-md-3 col-lg-5 d-none d-md-block mt-3">
-                    <a href="@Url.Action("Index", "Partner")">
-                        <button type="button" class="btn btn-light border border-success text-success px-4">Trở thành đối tác</button>
-                    </a>
+                    @if (Session["Role"]?.ToString() == "user" || Session["Role"]?.ToString() == null)
+                    {
+                        <a href="@Url.Action("Index", "Partner")">
+                            <button type="button" class="btn btn-light border border-success text-success px-4" onclick="return checkSession()">Trở thành đối tác</button>
+                        </a>
+                    }
                 </div>
                 <div class="col-6 d-md-none">
 
@@ -58,6 +61,16 @@
                                         <i class="fa-solid fa-user"></i>
                                     </button>
                                     <ul class="dropdown-menu">
+                                        @if (Session["Role"]?.ToString() == "admin")
+                                        {
+                                            <li><a class="dropdown-item" href="@Url.Action("Index", "Vehicle", new {area = "Admin"})">Trang Admin</a></li>
+                                        }
+                                        @if (Session["Role"]?.ToString() == "partner")
+                                        {
+                                            <li><a class="dropdown-item" href="@Url.Action("ListVehicles", "UserInfo")">Quản lý xe</a></li>
+                                            <li><a class="dropdown-item" href="@Url.Action("ListOrder", "UserInfo")">Quản lý đơn hàng</a></li>
+                                        }
+
                                         <li><a class="dropdown-item" href="@Url.Action("TripList", "UserInfo")">Danh sách chuyến</a></li>
                                         <li><a class="dropdown-item" href="@Url.Action("Information", "UserInfo")">Thông tin cá nhân</a></li>
                                         <li><a class="dropdown-item" href="@Url.Action("ChangePassword", "UserInfo")">Đổi mật khẩu</a></li>
@@ -83,7 +96,7 @@
                         <div class="row d-block d-md-none">
                             <div class="col-12 text-center mt-3">
                                 <a href="@Url.Action("Index", "Partner")">
-                                    <button type="button" class="btn btn-light border border-success text-success px-4">Trở thành đối tác</button>
+                                    <button type="button" class="btn btn-light border border-success text-success px-4" onclick="return checkSession()">Trở thành đối tác</button>
                                 </a>
                             </div>
                             <div class="col-12 py-3 text-center"><a href="#" class="text-decoration-none text-dark p-1">Về chúng tôi</a></div>
@@ -308,6 +321,20 @@
             });
         });
     });
+
+    function checkSession() {
+        var id = "@(Session["Id"] ?? "")";
+        if (id === "") {
+            alert("Vui lòng đăng nhập trước!");
+            shouldShowModal = false;
+
+            // Tự động click vào nút "Đăng nhập"
+            document.getElementById("loginButton").click();
+
+            return false;
+        }
+        return true;
+    }
     </script>
     @RenderSection("scripts", required: false)
 </body>

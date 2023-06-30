@@ -1,0 +1,35 @@
+﻿@{
+    var isListVehicleActive = ViewContext.RouteData.Values["controller"].ToString() == "UserInfo" && ViewContext.RouteData.Values["action"].ToString() == "ListVehicles";
+    var listVehicleClass = isListVehicleActive ? "bg-success active" : "";
+    var isListOrderActive = ViewContext.RouteData.Values["controller"].ToString() == "UserInfo" && ViewContext.RouteData.Values["action"].ToString() == "ListOrder";
+    var listOrderClass = isListOrderActive ? "bg-success active" : "";
+    var isListTripActive = ViewContext.RouteData.Values["controller"].ToString() == "UserInfo" && ViewContext.RouteData.Values["action"].ToString() == "TripList";
+    var listTripClass = isListTripActive ? "bg-success active" : "";
+    var isInfoActive = ViewContext.RouteData.Values["controller"].ToString() == "UserInfo" && ViewContext.RouteData.Values["action"].ToString() == "Information";
+    var infoClass = isInfoActive ? "bg-success active" : "";
+    var changePasswordActive = ViewContext.RouteData.Values["controller"].ToString() == "UserInfo" && ViewContext.RouteData.Values["action"].ToString() == "ChangePassword";
+    var changePasswordClass = changePasswordActive ? "bg-success active" : "";
+}
+
+<div class="col-lg-4">
+    <div class="list-group">
+        @if (Session["Role"]?.ToString() == "partner")
+        {
+            <a href="@Url.Action("ListVehicles", "UserInfo")" class="list-group-item list-group-item-action @listVehicleClass" aria-current="true">
+                Quản lý xe
+            </a>
+            <a href="@Url.Action("ListOrder", "UserInfo")" class="list-group-item list-group-item-action @listOrderClass" aria-current="true">
+                Quản lý đơn hàng
+            </a>
+        }
+        <a href="@Url.Action("TripList", "UserInfo")" class="list-group-item list-group-item-action @listTripClass" aria-current="true">
+            Danh sách chuyến
+        </a>
+        <a href="@Url.Action("Information", "UserInfo")" class="list-group-item list-group-item-action @infoClass">
+            Thông tin cá nhân
+        </a>
+        <a href="@Url.Action("ChangePassword", "UserInfo")" class="list-group-item list-group-item-action @changePasswordClass">
+            Đổi mật khẩu
+        </a>
+    </div>
+</div>

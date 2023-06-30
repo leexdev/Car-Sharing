@@ -37,30 +37,12 @@ function updateEndDate() {
   var totalPrice = unitPrice * totalDays;
   var formattedTotalPrice = totalPrice.toLocaleString();
   localStorage.setItem("totalPrice", formattedTotalPrice);
-  document.getElementById("totalPrice").textContent = formattedTotalPrice + " đ";
+  document.getElementById("totalPrice").textContent = formattedTotalPrice + " VNĐ";
 }
 
 function padZero(value) {
   return value.toString().padStart(2, '0');
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -87,7 +69,7 @@ document.addEventListener("click", function(event) {
 
   var isClickInside = collapseMenu.contains(targetElement);
 
-  if (!isClickInside || targetElement.matches("#loginBtn")) {
+  if (!isClickInside || targetElement.matches("#loginButton")) {
     collapseMenu.classList.remove("show");
   }
 });

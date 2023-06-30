@@ -9,11 +9,12 @@ CREATE TABLE Users (
     UserId UNIQUEIDENTIFIER DEFAULT NEWID() PRIMARY KEY,
     Email NVARCHAR(100) NOT NULL,
     Password NVARCHAR(50) NOT NULL,
-	Avatar NVARCHAR(MAX) NOT NULL,
+	Avatar NVARCHAR(MAX) NOT NULL DEFAULT N'/Content/assets/img/user.png',
     FullName NVARCHAR(100),
     Phone NVARCHAR(20),
     Address NVARCHAR(200),
-	Role NVARCHAR(20) NOT NULL DEFAULT N'user',
+	Role NVARCHAR(20) NOT NULL,
+	PartnerRequest BIT,
 	isDeleted BIT NOT NULL DEFAULT 0
 );
 GO
@@ -29,7 +30,7 @@ GO
 CREATE TABLE District (
     code INT NOT NULL PRIMARY KEY,
     name NVARCHAR(100) NOT NULL,
-    province_code UNIQUEIDENTIFIER NOT NULL,
+    province_code INT NOT NULL,
     
     FOREIGN KEY (province_code) REFERENCES Province(Code)
 );
@@ -77,13 +78,13 @@ CREATE TABLE Vehicle (
     Year INT NOT NULL,
     RegistrationNumber NVARCHAR(50) NOT NULL,
 	VehiclePrice DECIMAL(10, 2) NOT NULL,
-    DistrictId UNIQUEIDENTIFIER NOT NULL,
+    CodeDistrict INT NOT NULL,
 	isDeleted BIT NOT NULL DEFAULT 0,
 
 	FOREIGN KEY (UserId) REFERENCES Users(UserId),
 	FOREIGN KEY (BrandId) REFERENCES dbo.VehicleBrand(BrandId),
 	FOREIGN KEY (VariantId) REFERENCES dbo.VehicleVariant(VariantId),
-	FOREIGN KEY (DistrictId) REFERENCES dbo.District(DistrictId)
+	FOREIGN KEY (CodeDistrict) REFERENCES dbo.District(code)
 );
 GO
 
@@ -95,6 +96,10 @@ CREATE TABLE Booking (
     StartTime DATETIME NOT NULL,
     EndTime DATETIME NOT NULL,
     TotalPrice DECIMAL(10, 2) NOT NULL,
+	FullName NVARCHAR(100) NOT NULL,
+	Phone NVARCHAR(20) NOT NULL,
+	Address NVARCHAR(200) NOT NULL,
+	Email NVARCHAR(100) NOT NULL,
 	Note NVARCHAR(MAX),
     Status NVARCHAR(50) NOT NULL,
 	isDeleted BIT NOT NULL DEFAULT 0,
@@ -137,20 +142,21 @@ INSERT INTO dbo.VehicleBrand (BrandId, BrandName, VehicleTypeId, isDeleted) VALU
 INSERT INTO dbo.VehicleBrand (BrandId, BrandName, VehicleTypeId, isDeleted) VALUES (N'6D8AAE58-7CF1-41D3-A150-58B61B095A13', N'Yamaha', N'FC5EE9D1-FCF8-4A35-8FBD-E4AE31CC6C16', DEFAULT)
 INSERT INTO dbo.VehicleBrand (BrandId, BrandName, VehicleTypeId, isDeleted) VALUES (N'605BF24C-2753-4932-B7EA-0A2947A07E22', N'Kawasaki', N'FC5EE9D1-FCF8-4A35-8FBD-E4AE31CC6C16', DEFAULT)
 
-INSERT INTO dbo.Users (UserId, Username, Password, Avatar, Email, FullName, Phone, Address, Role, isDeleted) VALUES (N'F5FC5234-9824-48B4-87D3-1861DF176627', N'admin', N'admin', DEFAULT, N'lepro2883@gmail.com', N'Nguyễn Ngọc Lễ', N'0337378867', N'Khánh Hòa', N'admin', DEFAULT)
-INSERT INTO dbo.Users (UserId, Username, Password, Avatar, Email, FullName, Phone, Address, Role, isDeleted) VALUES (N'280FB15A-DAAB-4F65-9DA9-D0ADB3B17745', N'user', N'user', DEFAULT, N'lepro2882@gmail.com', N'Nguyễn Văn A', N'123456', N'Hồ Chí Minh', N'user', DEFAULT)
+INSERT INTO dbo.Users (UserId, Password, Avatar, Email, FullName, Phone, Address, Role, RequestPartner, isDeleted) VALUES (N'F5FC5234-9824-48B4-87D3-1861DF176627', N'202cb962ac59075b964b07152d234b70', DEFAULT, N'lepro2883@gmail.com', N'Nguyễn Ngọc Lễ', N'0337378867', N'Khánh Hòa', N'admin', DEFAULT, DEFAULT)
+INSERT INTO dbo.Users (UserId, Password, Avatar, Email, FullName, Phone, Address, Role, RequestPartner, isDeleted) VALUES (N'280FB15A-DAAB-4F65-9DA9-D0ADB3B17745', N'202cb962ac59075b964b07152d234b70', DEFAULT, N'lepro2882@gmail.com', N'Nguyễn Văn A', N'123456', N'Hồ Chí Minh', N'user', DEFAULT, DEFAULT)
 
-INSERT INTO dbo.Province (ProvinceId, ProvinceName, isDeleted) VALUES (N'D03F3582-847A-4175-83AF-38748606D774', N'Tp Hồ Chí Minh', DEFAULT)
-INSERT INTO dbo.Province (ProvinceId, ProvinceName, isDeleted) VALUES (N'39B62B58-998A-4C97-BDC2-A806F81ABDDB', N'Bình Dương', DEFAULT)
-INSERT INTO dbo.Province (ProvinceId, ProvinceName, isDeleted) VALUES (N'E31A9706-4FB4-4159-9D24-F37F4A150FC7', N'Đồng Nai', DEFAULT)
-INSERT INTO dbo.Province (ProvinceId, ProvinceName, isDeleted) VALUES (N'8368632A-9606-4335-A0F8-23917F61BDD3', N'Vũng Tàu', DEFAULT)
+INSERT INTO dbo.Province (Code, Name) VALUES (4, N'Tỉnh Cao Bằng')
+INSERT INTO dbo.Province (Code, Name) VALUES (6, N'Tỉnh Bắc Kạn')
+INSERT INTO dbo.Province (Code, Name) VALUES (8, N'Tỉnh Tuyên Quang')
 
-INSERT INTO dbo.District (DistrictId, DistrictName, ProvinceId, isDeleted) VALUES (N'86075FCD-7A29-4C8D-804F-D6E3E862B6DA', N'Quận 4', N'D03F3582-847A-4175-83AF-38748606D774', DEFAULT)
+INSERT INTO dbo.District (code, name, province_code) VALUES (N'45', N'Huyện Hà Quảng', N'4')
+INSERT INTO dbo.District (code, name, province_code) VALUES (N'63', N'Huyện Bạch Thông', N'6')
+INSERT INTO dbo.District (code, name, province_code) VALUES (N'53', N'Huyện Thạch An', N'4')
 
-INSERT INTO dbo.Vehicle (VehicleId, VehicleName, Content, UserId, BrandId, VariantId, ImageVehicle, Year, RegistrationNumber, VehiclePrice, DistrictId, isDeleted) 
-VALUES (N'410991D7-FA2C-4351-82B8-F228AAAE67AB', N'VINFAST LUX A 2.0 2020', N'Thông tin chi tiết', N'F5FC5234-9824-48B4-87D3-1861DF176627', N'E6B7B09E-1462-4AF2-B1B2-0F1077CFD83F', N'A476B41D-512B-4262-9F48-A9CB72CA91CA', N'/Content/assets/img/NAck_WBdKcVY88Th9rGAIQ.jpg', 2020, N'60A-917.53', 930000, N'86075FCD-7A29-4C8D-804F-D6E3E862B6DA', DEFAULT)
-INSERT INTO dbo.Vehicle (VehicleId, VehicleName, Content, UserId, BrandId, VariantId, ImageVehicle, Year, RegistrationNumber, VehiclePrice, DistrictId, isDeleted) 
-VALUES (N'9EEACB0D-90BF-4B04-BE10-1E7E810B35A3', N'HONDA CITY 2019', N'Thông tin chi tiết', N'F5FC5234-9824-48B4-87D3-1861DF176627', N'FB612D38-81CC-4D41-B4E8-D094F57E5D3D', N'A476B41D-512B-4262-9F48-A9CB72CA91CA', N'/Content/assets/img/NAck_WBdKcVY88Th9rGAIQ.jpg', 2019, N'51H-219.66', 750000, N'86075FCD-7A29-4C8D-804F-D6E3E862B6DA', DEFAULT)
+INSERT INTO dbo.Vehicle (VehicleId, VehicleName, Content, UserId, BrandId, VariantId, ImageVehicle, Year, RegistrationNumber, VehiclePrice, CodeDistrict, isDeleted) 
+VALUES (N'410991D7-FA2C-4351-82B8-F228AAAE67AB', N'VINFAST LUX A 2.0 2020', N'Thông tin chi tiết', N'F5FC5234-9824-48B4-87D3-1861DF176627', N'E6B7B09E-1462-4AF2-B1B2-0F1077CFD83F', N'A476B41D-512B-4262-9F48-A9CB72CA91CA', N'/Content/assets/img/NAck_WBdKcVY88Th9rGAIQ.jpg', 2020, N'60A-917.53', 930000, 45, DEFAULT)
+INSERT INTO dbo.Vehicle (VehicleId, VehicleName, Content, UserId, BrandId, VariantId, ImageVehicle, Year, RegistrationNumber, VehiclePrice, CodeDistrict, isDeleted) 
+VALUES (N'9EEACB0D-90BF-4B04-BE10-1E7E810B35A3', N'HONDA CITY 2019', N'Thông tin chi tiết', N'F5FC5234-9824-48B4-87D3-1861DF176627', N'FB612D38-81CC-4D41-B4E8-D094F57E5D3D', N'A476B41D-512B-4262-9F48-A9CB72CA91CA', N'/Content/assets/img/NAck_WBdKcVY88Th9rGAIQ.jpg', 2019, N'51H-219.66', 750000, 63, DEFAULT)
 
 INSERT INTO	dbo.Review (ReviewId, UserId, VehicleId, Rating, Comment, PushlishDate, isDeleted) VALUES (DEFAULT, N'280FB15A-DAAB-4F65-9DA9-D0ADB3B17745', N'410991D7-FA2C-4351-82B8-F228AAAE67AB', 5, N'Xe mới, sạch sẽ', DEFAULT, DEFAULT)
 INSERT INTO	dbo.Review (ReviewId, UserId, VehicleId, Rating, Comment, PushlishDate, isDeleted) VALUES (DEFAULT, N'280FB15A-DAAB-4F65-9DA9-D0ADB3B17745', N'410991D7-FA2C-4351-82B8-F228AAAE67AB', 3, N'Xe mới, sạch sẽ', DEFAULT, DEFAULT)

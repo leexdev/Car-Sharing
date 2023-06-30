@@ -4,6 +4,10 @@
     <EntitySetMapping Name="Bookings">
       <EntityTypeMapping TypeName="CarSharingDBModel.Booking">
         <MappingFragment StoreEntitySet="Booking">
+          <ScalarProperty Name="Email" ColumnName="Email" />
+          <ScalarProperty Name="Address" ColumnName="Address" />
+          <ScalarProperty Name="Phone" ColumnName="Phone" />
+          <ScalarProperty Name="FullName" ColumnName="FullName" />
           <ScalarProperty Name="BookingId" ColumnName="BookingId" />
           <ScalarProperty Name="UserId" ColumnName="UserId" />
           <ScalarProperty Name="VehicleId" ColumnName="VehicleId" />
@@ -49,6 +53,7 @@
     <EntitySetMapping Name="Users">
       <EntityTypeMapping TypeName="CarSharingDBModel.User">
         <MappingFragment StoreEntitySet="Users">
+          <ScalarProperty Name="PartnerRequest" ColumnName="PartnerRequest" />
           <ScalarProperty Name="UserId" ColumnName="UserId" />
           <ScalarProperty Name="Password" ColumnName="Password" />
           <ScalarProperty Name="Avatar" ColumnName="Avatar" />

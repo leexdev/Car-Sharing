@@ -141,11 +141,11 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Areas\Admin\AdminAreaRegistration.cs" />
+    <Compile Include="Areas\Admin\Controllers\UsersController.cs" />
     <Compile Include="Areas\Admin\Controllers\VehicleBrandController.cs" />
     <Compile Include="Areas\Admin\Controllers\VehicleController.cs" />
     <Compile Include="Areas\Admin\Controllers\VehicleTypeController.cs" />
     <Compile Include="Areas\Admin\Controllers\VehicleVariantController.cs" />
-    <Compile Include="Areas\User\UserAreaRegistration.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\PartnerController.cs" />
     <Compile Include="Controllers\PayController.cs" />
@@ -408,6 +408,7 @@
     <Content Include="Content\assets\img\icon.png" />
     <Content Include="Content\assets\img\logo.png" />
     <Content Include="Content\assets\img\NAck_WBdKcVY88Th9rGAIQ.jpg" />
+    <Content Include="Content\assets\img\paysuccess.png" />
     <Content Include="Content\assets\img\pexels-craig-adderley-1563356.jpg" />
     <Content Include="Content\assets\img\pexels-nout-gons-248159.jpg" />
     <Content Include="Content\assets\img\pexels-tiana-614484.jpg" />
@@ -872,8 +873,6 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Areas\Admin\Data\" />
-    <Folder Include="Areas\User\Controllers\" />
-    <Folder Include="Areas\User\Data\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff2" />
@@ -943,9 +942,6 @@
     <Content Include="Areas\Admin\Views\VehicleType\Index.cshtml" />
     <Content Include="Areas\Admin\Views\VehicleVariant\Index.cshtml" />
     <Content Include="Areas\Admin\Views\VehicleBrand\Index.cshtml" />
-    <Content Include="Areas\User\Views\web.config" />
-    <Content Include="Areas\User\Views\_ViewStart.cshtml" />
-    <Content Include="Areas\User\Views\Shared\_Layout.cshtml" />
     <EntityDeploy Include="Models\DbModel.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>DbModel.Designer.cs</LastGenOutput>
@@ -953,6 +949,8 @@
     <Content Include="Models\DbModel.edmx.diagram">
       <DependentUpon>DbModel.edmx</DependentUpon>
     </Content>
+    <Content Include="Areas\Admin\Views\Users\Index.cshtml" />
+    <Content Include="Areas\Admin\Views\Users\Partner.cshtml" />
     <None Include="packages.config" />
     <Content Include="Views\UserInfo\TripList.cshtml" />
     <Content Include="Views\UserInfo\Information.cshtml" />
@@ -960,6 +958,12 @@
     <Content Include="Views\UserInfo\TripDetail.cshtml" />
     <Content Include="Views\Pay\Index.cshtml" />
     <Content Include="Views\Shared\_ListVehicleSearch.cshtml" />
+    <Content Include="Views\Pay\PaySuccess.cshtml" />
+    <Content Include="Views\Shared\_ListBooking.cshtml" />
+    <Content Include="Views\Partner\Success.cshtml" />
+    <Content Include="Views\Shared\_UserInfo.cshtml" />
+    <Content Include="Views\UserInfo\ListVehicles.cshtml" />
+    <Content Include="Views\UserInfo\CreateVehicle.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

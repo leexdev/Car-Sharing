@@ -8,7 +8,9 @@
     var isVehicleVariantActive = ViewContext.RouteData.Values["controller"].ToString() == "VehicleVariant" && ViewContext.RouteData.Values["action"].ToString() == "Index";
     var isVehicleBrandActive = ViewContext.RouteData.Values["controller"].ToString() == "VehicleBrand" && ViewContext.RouteData.Values["action"].ToString() == "Index";
     var isVehicleActive = ViewContext.RouteData.Values["controller"].ToString() == "Vehicle" && ViewContext.RouteData.Values["action"].ToString() == "Index";
-    var isUserActive = ViewContext.RouteData.Values["controller"].ToString() == "User" && ViewContext.RouteData.Values["action"].ToString() == "Index";
+    var isUserActive = ViewContext.RouteData.Values["controller"].ToString() == "Users" && ViewContext.RouteData.Values["action"].ToString() == "Index";
+    var isPartnerActive = ViewContext.RouteData.Values["controller"].ToString() == "Users" && ViewContext.RouteData.Values["action"].ToString() == "Partner";
+    var isOrderActive = ViewContext.RouteData.Values["controller"].ToString() == "Order" && ViewContext.RouteData.Values["action"].ToString() == "Index";
     string actionCurrent = ViewBag.ActionCurrent;
     string controllerCurrent = ViewBag.ControllerCurrent;
 }
@@ -82,14 +84,26 @@
                                 <li class="@(isVehicleVariantActive ? "active" : "")">
                                     <a href="@Url.Action("Index", "VehicleVariant")">Loại hộp số</a>
                                 </li>
-                                <li class="@(isUserActive ? "active" : "")">
+                                <li class="@(isVehicleBrandActive ? "active" : "")">
                                     <a href="@Url.Action("Index", "VehicleBrand")">Hãng xe</a>
                                 </li>
                                 <!-- Các menu khác -->
                             </ul>
                         </li>
-                        <li class="@(isUserActive ? "active" : "")">
-                            <a href="@Url.Action("Index", "User")">Quản lý người dùng</a>
+                        <li>
+                            <a href="#userType" data-toggle="collapse" aria-expanded="true" class="dropdown-toggle">Quản lý người dùng</a>
+                            <ul class="collapse active list-unstyled menu bg-body-secondary" id="userType">
+                                <li class="@(isUserActive ? "active" : "")">
+                                    <a href="@Url.Action("Index", "Users")">Quản lý người dùng</a>
+                                </li>
+                                <li class="@(isPartnerActive ? "active" : "")">
+                                    <a href="@Url.Action("Partner", "Users")">Đăng ký đối tác</a>
+                                </li>
+                                <!-- Các menu khác -->
+                            </ul>
+                        </li>
+                        <li class="@(isOrderActive ? "active" : "")">
+                            <a href="@Url.Action("Index", "Order")">Quản lý đơn hàng</a>
                         </li>
                         <!-- Các menu khác -->
                     </ul>
@@ -137,7 +151,7 @@
 
                                         <li class="dropdown nav-item">
                                             <a class="nav-link" href="#" data-toggle="dropdown">
-                                                <img src="~/Content/assets/img/@Session["Avatar"]" style="width:40px; border-radius:50%;" />
+                                                <img src="@Session["Avatar"]" style="width:40px; border-radius:50%;" />
                                                 <span class="xp-user-live"></span>
                                             </a>
                                             <ul class="dropdown-menu small-menu">

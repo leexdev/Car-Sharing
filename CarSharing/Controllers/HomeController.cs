@@ -53,7 +53,7 @@ namespace CarSharing.Controllers
                 return Json(new { success = false, message = TempData["ErrorMessage"] });
             }
             user.UserId = Guid.NewGuid();
-            user.Avatar = "/Content/img/user.png";
+            user.Avatar = "/Content/assets/img/user.png";
             user.Role = "user";
             user.Password = vehicleService.GetMD5(user.Password);
             user.isDeleted = false;

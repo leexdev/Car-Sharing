@@ -19,6 +19,11 @@ namespace CarSharing.Service
             db = new CarSharingDBEntities();
         }
 
+        public List<User> GetUsers()
+        {
+            return db.Users.Where(user => !user.isDeleted).ToList();
+        }
+
         public List<VehicleType> GetVehicleTypes()
         {
             return db.VehicleTypes.Where(vehicleType => !vehicleType.isDeleted).ToList();
@@ -59,6 +64,16 @@ namespace CarSharing.Service
         public List<Vehicle> GetVehicles()
         {
             return db.Vehicles.Where(vehicle => !vehicle.isDeleted).ToList();
+        }
+
+        public List<Booking> GetBookingsByUserId(Guid userId)
+        {
+            return db.Bookings.Where(booking => booking.UserId == userId && !booking.isDeleted).ToList();
+        }
+
+        public Booking GetBooking(Guid bookingId)
+        {
+            return db.Bookings.Where(booking => booking.BookingId == bookingId && !booking.isDeleted).FirstOrDefault();
         }
 
         public List<Vehicle> SearchVehicles(Guid vehicleType, int provinceId)
@@ -125,6 +140,13 @@ namespace CarSharing.Service
             return objBrandModel;
         }
 
+        public VehicleManagementModel GetUserModel()
+        {
+            VehicleManagementModel objPartnerModel = new VehicleManagementModel();
+            objPartnerModel.ListUsers = GetUsers();
+            return objPartnerModel;
+        }
+
         public VehicleManagementModel GetDetailModel()
         {
             VehicleManagementModel objDetailModel = new VehicleManagementModel();
@@ -163,6 +185,17 @@ namespace CarSharing.Service
             return db.VehicleBrands
                 .ToList()
                 .Where(n => diacriticsHelper.RemoveDiacritics(n.BrandName.ToUpper()).Contains(normalizedSearchString) && !n.isDeleted)
+                .ToList();
+        }
+
+        public List<User> GetUsersSearch(string searchString)
+        {
+            diacriticsHelper diacriticsHelper = new diacriticsHelper();
+            string normalizedSearchString = diacriticsHelper.RemoveDiacritics(searchString.ToUpper());
+
+            return db.Users
+                .ToList()
+                .Where(n => diacriticsHelper.RemoveDiacritics(n.Email.ToUpper()).Contains(normalizedSearchString) && !n.isDeleted)
                 .ToList();
         }
 
@@ -351,12 +384,49 @@ namespace CarSharing.Service
             {
                 existingUser.FullName = _user.FullName;
                 existingUser.Phone = _user.Phone;
-                existingUser.Email = _user.Email;
                 existingUser.Address = _user.Address;
+
+                if (_user.PartnerRequest)
+                {
+                    existingUser.PartnerRequest = _user.PartnerRequest;
+                }
+
+                if (_user.Role != null)
+                {
+                    existingUser.Role = _user.Role;
+                }
 
                 db.Configuration.ValidateOnSaveEnabled = false;
                 db.SaveChanges();
             }
+        }
+
+        public void UpdatePartner(User _user)
+        {
+            var existingUser = db.Users.Find(_user.UserId);
+
+            if (existingUser != null)
+            {
+                existingUser.Role = _user.Role;
+                existingUser.PartnerRequest = _user.PartnerRequest;
+
+                db.Configuration.ValidateOnSaveEnabled = false;
+                db.SaveChanges();
+            }
+        }
+
+        public void DeleteUser(User user)
+        {
+            user.isDeleted = true;
+            db.Configuration.ValidateOnSaveEnabled = false;
+            db.SaveChanges();
+        }
+
+        public void DeletePartner(User user)
+        {
+            user.PartnerRequest = false;
+            db.Configuration.ValidateOnSaveEnabled = false;
+            db.SaveChanges();
         }
 
         public void UpdateAvatar(User _user)
@@ -370,6 +440,13 @@ namespace CarSharing.Service
                 db.Configuration.ValidateOnSaveEnabled = false;
                 db.SaveChanges();
             }
+        }
+
+        public void AddBooking(Booking booking)
+        {
+            db.Bookings.Add(booking);
+            db.Configuration.ValidateOnSaveEnabled = false;
+            db.SaveChanges();
         }
 
         public Province GetProvinceByCode(int provinceCode)

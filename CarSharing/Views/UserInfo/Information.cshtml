@@ -2,20 +2,14 @@
 
 @{
     ViewBag.Title = "Thông tin cá nhân";
+    ViewBag.ActionCurrent = "Information";
+    ViewBag.ControllerCurrent = "UserInfo";
 }
 
 <div id="mycontent" class="pt-6 pb-5 pb-lg-0" style="min-height: 700px">
     <div class="container">
         <div class="row my-3">
-            <div class="col-lg-4">
-                <div class="list-group">
-                    <a href="@Url.Action("TripList", "UserInfo")" class="list-group-item list-group-item-action" aria-current="true">
-                        Danh sách chuyến
-                    </a>
-                    <a href="#" class="list-group-item list-group-item-action bg-success active">Thông tin cá nhân</a>
-                    <a href="@Url.Action("ChangePassword", "UserInfo")" class="list-group-item list-group-item-action">Đổi mật khẩu</a>
-                </div>
-            </div>
+            @Html.Partial("_UserInfo")
             <div class="col-lg-8 mt-3 mt-lg-0">
                 <div class="text-uppercase fw-bold">Thông tin cá nhân</div>
                 <hr>
@@ -102,10 +96,6 @@
                                                     <div class="mb-3">
                                                         <label for="phone" class="form-label">Số điện thoại</label>
                                                         <input type="number" class="form-control" id="phone" name="Phone" value="@Model.User.Phone">
-                                                    </div>
-                                                    <div class="mb-3">
-                                                        <label for="email" class="form-label">Địa chỉ Email</label>
-                                                        <input type="email" class="form-control" id="email" name="Email" value="@Model.User.Email">
                                                     </div>
                                                     <div class="mb-3">
                                                         <label for="address" class="form-label">Địa chỉ</label>

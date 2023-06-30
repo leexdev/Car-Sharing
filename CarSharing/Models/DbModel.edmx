@@ -15,6 +15,10 @@
           <Property Name="StartTime" Type="datetime" Nullable="false" />
           <Property Name="EndTime" Type="datetime" Nullable="false" />
           <Property Name="TotalPrice" Type="decimal" Precision="10" Scale="2" Nullable="false" />
+          <Property Name="FullName" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Phone" Type="nvarchar" MaxLength="20" Nullable="false" />
+          <Property Name="Address" Type="nvarchar" MaxLength="200" Nullable="false" />
+          <Property Name="Email" Type="nvarchar" MaxLength="100" Nullable="false" />
           <Property Name="Note" Type="nvarchar(max)" />
           <Property Name="Status" Type="nvarchar" MaxLength="50" Nullable="false" />
           <Property Name="isDeleted" Type="bit" Nullable="false" />
@@ -51,14 +55,15 @@
             <PropertyRef Name="UserId" />
           </Key>
           <Property Name="UserId" Type="uniqueidentifier" Nullable="false" />
-          <Property Name="Password" Type="nvarchar" MaxLength="50" Nullable="false" />
-          <Property Name="Avatar" Type="nvarchar(max)" />
           <Property Name="Email" Type="nvarchar" MaxLength="100" Nullable="false" />
+          <Property Name="Password" Type="nvarchar" MaxLength="50" Nullable="false" />
+          <Property Name="Avatar" Type="nvarchar(max)" Nullable="false" />
           <Property Name="FullName" Type="nvarchar" MaxLength="100" />
           <Property Name="Phone" Type="nvarchar" MaxLength="20" />
           <Property Name="Address" Type="nvarchar" MaxLength="200" />
           <Property Name="Role" Type="nvarchar" MaxLength="20" Nullable="false" />
           <Property Name="isDeleted" Type="bit" Nullable="false" />
+          <Property Name="PartnerRequest" Type="bit" Nullable="false" />
         </EntityType>
         <EntityType Name="Vehicle">
           <Key>
@@ -103,7 +108,7 @@
           <Property Name="VehicleTypeId" Type="uniqueidentifier" Nullable="false" />
           <Property Name="isDeleted" Type="bit" Nullable="false" />
         </EntityType>
-        <Association Name="FK__Booking__UserId__778AC167">
+        <Association Name="FK__Booking__UserId__44FF419A">
           <End Role="Users" Type="Self.Users" Multiplicity="1" />
           <End Role="Booking" Type="Self.Booking" Multiplicity="*" />
           <ReferentialConstraint>
@@ -115,7 +120,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Booking__Vehicle__787EE5A0">
+        <Association Name="FK__Booking__Vehicle__45F365D3">
           <End Role="Vehicle" Type="Self.Vehicle" Multiplicity="1" />
           <End Role="Booking" Type="Self.Booking" Multiplicity="*" />
           <ReferentialConstraint>
@@ -127,7 +132,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__District__provin__5DCAEF64">
+        <Association Name="FK__District__provin__2B3F6F97">
           <End Role="Province" Type="Self.Province" Multiplicity="1" />
           <End Role="District" Type="Self.District" Multiplicity="*" />
           <ReferentialConstraint>
@@ -139,7 +144,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Review__UserId__7E37BEF6">
+        <Association Name="FK__Review__UserId__4BAC3F29">
           <End Role="Users" Type="Self.Users" Multiplicity="1" />
           <End Role="Review" Type="Self.Review" Multiplicity="*" />
           <ReferentialConstraint>
@@ -151,7 +156,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Review__VehicleI__7F2BE32F">
+        <Association Name="FK__Review__VehicleI__4CA06362">
           <End Role="Vehicle" Type="Self.Vehicle" Multiplicity="1" />
           <End Role="Review" Type="Self.Review" Multiplicity="*" />
           <ReferentialConstraint>
@@ -163,7 +168,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Vehicle__BrandId__70DDC3D8">
+        <Association Name="FK__Vehicle__BrandId__3E52440B">
           <End Role="VehicleBrand" Type="Self.VehicleBrand" Multiplicity="1" />
           <End Role="Vehicle" Type="Self.Vehicle" Multiplicity="*" />
           <ReferentialConstraint>
@@ -175,7 +180,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Vehicle__CodeDis__72C60C4A">
+        <Association Name="FK__Vehicle__CodeDis__403A8C7D">
           <End Role="District" Type="Self.District" Multiplicity="1" />
           <End Role="Vehicle" Type="Self.Vehicle" Multiplicity="*" />
           <ReferentialConstraint>
@@ -187,7 +192,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Vehicle__UserId__6FE99F9F">
+        <Association Name="FK__Vehicle__UserId__3D5E1FD2">
           <End Role="Users" Type="Self.Users" Multiplicity="1" />
           <End Role="Vehicle" Type="Self.Vehicle" Multiplicity="*" />
           <ReferentialConstraint>
@@ -199,7 +204,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__Vehicle__Variant__71D1E811">
+        <Association Name="FK__Vehicle__Variant__3F466844">
           <End Role="VehicleVariant" Type="Self.VehicleVariant" Multiplicity="1" />
           <End Role="Vehicle" Type="Self.Vehicle" Multiplicity="*" />
           <ReferentialConstraint>
@@ -211,7 +216,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__VehicleBr__Vehic__66603565">
+        <Association Name="FK__VehicleBr__Vehic__33D4B598">
           <End Role="VehicleType" Type="Self.VehicleType" Multiplicity="1" />
           <End Role="VehicleBrand" Type="Self.VehicleBrand" Multiplicity="*" />
           <ReferentialConstraint>
@@ -223,7 +228,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <Association Name="FK__VehicleVa__Vehic__6B24EA82">
+        <Association Name="FK__VehicleVa__Vehic__38996AB5">
           <End Role="VehicleType" Type="Self.VehicleType" Multiplicity="1" />
           <End Role="VehicleVariant" Type="Self.VehicleVariant" Multiplicity="*" />
           <ReferentialConstraint>
@@ -245,47 +250,47 @@
           <EntitySet Name="VehicleBrand" EntityType="Self.VehicleBrand" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="VehicleType" EntityType="Self.VehicleType" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="VehicleVariant" EntityType="Self.VehicleVariant" Schema="dbo" store:Type="Tables" />
-          <AssociationSet Name="FK__Booking__UserId__778AC167" Association="Self.FK__Booking__UserId__778AC167">
+          <AssociationSet Name="FK__Booking__UserId__44FF419A" Association="Self.FK__Booking__UserId__44FF419A">
             <End Role="Users" EntitySet="Users" />
             <End Role="Booking" EntitySet="Booking" />
           </AssociationSet>
-          <AssociationSet Name="FK__Booking__Vehicle__787EE5A0" Association="Self.FK__Booking__Vehicle__787EE5A0">
+          <AssociationSet Name="FK__Booking__Vehicle__45F365D3" Association="Self.FK__Booking__Vehicle__45F365D3">
             <End Role="Vehicle" EntitySet="Vehicle" />
             <End Role="Booking" EntitySet="Booking" />
           </AssociationSet>
-          <AssociationSet Name="FK__District__provin__5DCAEF64" Association="Self.FK__District__provin__5DCAEF64">
+          <AssociationSet Name="FK__District__provin__2B3F6F97" Association="Self.FK__District__provin__2B3F6F97">
             <End Role="Province" EntitySet="Province" />
             <End Role="District" EntitySet="District" />
           </AssociationSet>
-          <AssociationSet Name="FK__Review__UserId__7E37BEF6" Association="Self.FK__Review__UserId__7E37BEF6">
+          <AssociationSet Name="FK__Review__UserId__4BAC3F29" Association="Self.FK__Review__UserId__4BAC3F29">
             <End Role="Users" EntitySet="Users" />
             <End Role="Review" EntitySet="Review" />
           </AssociationSet>
-          <AssociationSet Name="FK__Review__VehicleI__7F2BE32F" Association="Self.FK__Review__VehicleI__7F2BE32F">
+          <AssociationSet Name="FK__Review__VehicleI__4CA06362" Association="Self.FK__Review__VehicleI__4CA06362">
             <End Role="Vehicle" EntitySet="Vehicle" />
             <End Role="Review" EntitySet="Review" />
           </AssociationSet>
-          <AssociationSet Name="FK__Vehicle__BrandId__70DDC3D8" Association="Self.FK__Vehicle__BrandId__70DDC3D8">
+          <AssociationSet Name="FK__Vehicle__BrandId__3E52440B" Association="Self.FK__Vehicle__BrandId__3E52440B">
             <End Role="VehicleBrand" EntitySet="VehicleBrand" />
             <End Role="Vehicle" EntitySet="Vehicle" />
           </AssociationSet>
-          <AssociationSet Name="FK__Vehicle__CodeDis__72C60C4A" Association="Self.FK__Vehicle__CodeDis__72C60C4A">
+          <AssociationSet Name="FK__Vehicle__CodeDis__403A8C7D" Association="Self.FK__Vehicle__CodeDis__403A8C7D">
             <End Role="District" EntitySet="District" />
             <End Role="Vehicle" EntitySet="Vehicle" />
           </AssociationSet>
-          <AssociationSet Name="FK__Vehicle__UserId__6FE99F9F" Association="Self.FK__Vehicle__UserId__6FE99F9F">
+          <AssociationSet Name="FK__Vehicle__UserId__3D5E1FD2" Association="Self.FK__Vehicle__UserId__3D5E1FD2">
             <End Role="Users" EntitySet="Users" />
             <End Role="Vehicle" EntitySet="Vehicle" />
           </AssociationSet>
-          <AssociationSet Name="FK__Vehicle__Variant__71D1E811" Association="Self.FK__Vehicle__Variant__71D1E811">
+          <AssociationSet Name="FK__Vehicle__Variant__3F466844" Association="Self.FK__Vehicle__Variant__3F466844">
             <End Role="VehicleVariant" EntitySet="VehicleVariant" />
             <End Role="Vehicle" EntitySet="Vehicle" />
           </AssociationSet>
-          <AssociationSet Name="FK__VehicleBr__Vehic__66603565" Association="Self.FK__VehicleBr__Vehic__66603565">
+          <AssociationSet Name="FK__VehicleBr__Vehic__33D4B598" Association="Self.FK__VehicleBr__Vehic__33D4B598">
             <End Role="VehicleType" EntitySet="VehicleType" />
             <End Role="VehicleBrand" EntitySet="VehicleBrand" />
           </AssociationSet>
-          <AssociationSet Name="FK__VehicleVa__Vehic__6B24EA82" Association="Self.FK__VehicleVa__Vehic__6B24EA82">
+          <AssociationSet Name="FK__VehicleVa__Vehic__38996AB5" Association="Self.FK__VehicleVa__Vehic__38996AB5">
             <End Role="VehicleType" EntitySet="VehicleType" />
             <End Role="VehicleVariant" EntitySet="VehicleVariant" />
           </AssociationSet>
@@ -309,6 +314,10 @@
           <Property Name="isDeleted" Type="Boolean" Nullable="false" />
           <NavigationProperty Name="User" Relationship="Self.FK__Booking__UserId__778AC167" FromRole="Booking" ToRole="Users" />
           <NavigationProperty Name="Vehicle" Relationship="Self.FK__Booking__Vehicle__787EE5A0" FromRole="Booking" ToRole="Vehicle" />
+          <Property Name="FullName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+          <Property Name="Phone" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+          <Property Name="Address" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+          <Property Name="Email" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="District">
           <Key>
@@ -348,7 +357,7 @@
           </Key>
           <Property Name="UserId" Type="Guid" Nullable="false" />
           <Property Name="Password" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-          <Property Name="Avatar" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+          <Property Name="Avatar" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="Email" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
           <Property Name="FullName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="Phone" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
@@ -358,6 +367,7 @@
           <NavigationProperty Name="Bookings" Relationship="Self.FK__Booking__UserId__778AC167" FromRole="Users" ToRole="Booking" />
           <NavigationProperty Name="Reviews" Relationship="Self.FK__Review__UserId__7E37BEF6" FromRole="Users" ToRole="Review" />
           <NavigationProperty Name="Vehicles" Relationship="Self.FK__Vehicle__UserId__6FE99F9F" FromRole="Users" ToRole="Vehicle" />
+          <Property Name="PartnerRequest" Type="Boolean" Nullable="false" />
         </EntityType>
         <EntityType Name="Vehicle">
           <Key>
@@ -610,6 +620,10 @@
           <EntitySetMapping Name="Bookings">
             <EntityTypeMapping TypeName="CarSharingDBModel.Booking">
               <MappingFragment StoreEntitySet="Booking">
+                <ScalarProperty Name="Email" ColumnName="Email" />
+                <ScalarProperty Name="Address" ColumnName="Address" />
+                <ScalarProperty Name="Phone" ColumnName="Phone" />
+                <ScalarProperty Name="FullName" ColumnName="FullName" />
                 <ScalarProperty Name="BookingId" ColumnName="BookingId" />
                 <ScalarProperty Name="UserId" ColumnName="UserId" />
                 <ScalarProperty Name="VehicleId" ColumnName="VehicleId" />
@@ -655,6 +669,7 @@
           <EntitySetMapping Name="Users">
             <EntityTypeMapping TypeName="CarSharingDBModel.User">
               <MappingFragment StoreEntitySet="Users">
+                <ScalarProperty Name="PartnerRequest" ColumnName="PartnerRequest" />
                 <ScalarProperty Name="UserId" ColumnName="UserId" />
                 <ScalarProperty Name="Password" ColumnName="Password" />
                 <ScalarProperty Name="Avatar" ColumnName="Avatar" />

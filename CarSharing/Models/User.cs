@@ -37,6 +37,7 @@ namespace CarSharing.Models
         public string Address { get; set; }
         public string Role { get; set; }
         public bool isDeleted { get; set; }
+        public bool PartnerRequest { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Booking> Bookings { get; set; }

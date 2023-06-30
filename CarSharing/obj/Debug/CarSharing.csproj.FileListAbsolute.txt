@@ -174,4 +174,3 @@ E:\CarSharing\CarSharing\obj\Debug\CarSharing.csproj.CoreCompileInputs.cache
 E:\CarSharing\CarSharing\obj\Debug\CarSharing.csproj.CopyComplete
 E:\CarSharing\CarSharing\obj\Debug\CarSharing.dll
 E:\CarSharing\CarSharing\obj\Debug\CarSharing.pdb
-E:\CarSharing\CarSharing\bin\CKFinder.pdb

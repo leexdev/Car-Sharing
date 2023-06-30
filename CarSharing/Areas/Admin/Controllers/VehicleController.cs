@@ -135,8 +135,7 @@ namespace CarSharing.Areas.Admin.Controllers
                 fileName = fileName + "_" + long.Parse(DateTime.Now.ToString("yyyyMMddhhmmss")) + extension;
                 vehicle.ImageVehicle = "/Content/assets/img/" + fileName;
                 ImageUpLoad.SaveAs(Path.Combine(Server.MapPath("~/Content/assets/img/"), fileName));
-                string userIdString = "F5FC5234-9824-48B4-87D3-1861DF176627";
-                vehicle.UserId = Guid.Parse(userIdString);
+                vehicle.UserId = (Guid)Session["Id"];
 
                 vehicleService.AddVehicle(vehicle);
                 Session["SuccessMessage"] = "Thêm thành công!";

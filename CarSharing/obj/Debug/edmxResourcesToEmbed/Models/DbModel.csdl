@@ -15,6 +15,10 @@
     <Property Name="isDeleted" Type="Boolean" Nullable="false" />
     <NavigationProperty Name="User" Relationship="Self.FK__Booking__UserId__778AC167" FromRole="Booking" ToRole="Users" />
     <NavigationProperty Name="Vehicle" Relationship="Self.FK__Booking__Vehicle__787EE5A0" FromRole="Booking" ToRole="Vehicle" />
+    <Property Name="FullName" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
+    <Property Name="Phone" Type="String" Nullable="false" MaxLength="20" FixedLength="false" Unicode="true" />
+    <Property Name="Address" Type="String" Nullable="false" MaxLength="200" FixedLength="false" Unicode="true" />
+    <Property Name="Email" Type="String" Nullable="false" MaxLength="100" FixedLength="false" Unicode="true" />
   </EntityType>
   <EntityType Name="District">
     <Key>
@@ -54,7 +58,7 @@
     </Key>
     <Property Name="UserId" Type="Guid" Nullable="false" />
     <Property Name="Password" Type="String" MaxLength="50" FixedLength="false" Unicode="true" Nullable="false" />
-    <Property Name="Avatar" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" />
+    <Property Name="Avatar" Type="String" MaxLength="Max" FixedLength="false" Unicode="true" Nullable="false" />
     <Property Name="Email" Type="String" MaxLength="100" FixedLength="false" Unicode="true" Nullable="false" />
     <Property Name="FullName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
     <Property Name="Phone" Type="String" MaxLength="20" FixedLength="false" Unicode="true" />
@@ -64,6 +68,7 @@
     <NavigationProperty Name="Bookings" Relationship="Self.FK__Booking__UserId__778AC167" FromRole="Users" ToRole="Booking" />
     <NavigationProperty Name="Reviews" Relationship="Self.FK__Review__UserId__7E37BEF6" FromRole="Users" ToRole="Review" />
     <NavigationProperty Name="Vehicles" Relationship="Self.FK__Vehicle__UserId__6FE99F9F" FromRole="Users" ToRole="Vehicle" />
+    <Property Name="PartnerRequest" Type="Boolean" Nullable="false" />
   </EntityType>
   <EntityType Name="Vehicle">
     <Key>

@@ -60,13 +60,13 @@
                         <div class="col-lg-6">
                             <span class="fw-lighter">Ngày nhận xe</span>
                             <fieldset>
-                                <input class="text-center border w-100" type="datetime-local" id="dateTimePickerStart" name="dateTimePicker" onchange="updateEndDate()" style="height: 36px;">
+                                <input class="text-center border w-100" type="datetime-local" id="dateTimePickerStart" name="dateTimePicker" onchange="updateEndDatePayLink()" style="height: 36px;">
                             </fieldset>
                         </div>
                         <div class="col-lg-6">
                             <span class="fw-lighter">Ngày trả xe</span>
                             <fieldset>
-                                <input class="text-center border w-100" type="datetime-local" id="dateTimePickerEnd" name="dateTimePicker" onchange="updateEndDate()" style="height: 36px;">
+                                <input class="text-center border w-100" type="datetime-local" id="dateTimePickerEnd" name="dateTimePicker" onchange="updateEndDatePayLink()" style="height: 36px;">
                             </fieldset>
                         </div>
                     </div>
@@ -77,7 +77,7 @@
                     <div class="row">
                         <div class="col-lg-12">
                             <div class="float-start">Đơn giá</div>
-                            <div class="float-end" id="price">@(Math.Round(Model.Vehicle.VehiclePrice).ToString("N0"))</div>
+                            <div class="float-end" id="price" >@(Math.Round(Model.Vehicle.VehiclePrice).ToString("N0")) VNĐ</div>
                         </div>
                         <div class="col-lg-12">
                             <div class="float-start">Thời gian thuê</div>
@@ -92,7 +92,7 @@
                         </div>
                     </div>
                 </div>
-                <a href="@Url.Action("Index", "Pay", new {id = Model.Vehicle.VehicleId })">
+                <a id="payLink" href="@Url.Action("Index", "Pay", new {id = Model.Vehicle.VehicleId })">
                     <button type="button" class="btn btn-success w-100" onclick="return checkSession()">Đặt xe</button>
                 </a>
             </div>
@@ -149,20 +149,19 @@
 
 @section scripts {
     <script src="~/Content/assets/js/detail.js"></script>
-    <script>
-    function checkSession() {
-        var id = "@(Session["Id"] ?? "")";
-        if (id === "") {
-            alert("Vui lòng đăng nhập trước!");
-            shouldShowModal = false;
-
-            // Tự động click vào nút "Đăng nhập"
-            document.getElementById("loginButton").click();
-
-            return false;
-        }
-        return true;
+<script>
+    
+    function updateEndDatePayLink() {
+        updateEndDate();
+        var startTime = document.getElementById("dateTimePickerStart").value;
+        var endTime = document.getElementById("dateTimePickerEnd").value;
+        var payLink = document.getElementById("payLink");
+        payLink.href = "@Url.Action("Index", "Pay", new {id = Model.Vehicle.VehicleId})" + "?startTime=" + startTime + "&endTime=" + endTime;
     }
-    </script>
+
+    document.addEventListener("DOMContentLoaded", function () {
+        updateEndDatePayLink();
+    });
+</script>
 }
 

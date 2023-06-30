@@ -69,40 +69,32 @@
                                 <img class="img-lg-vehicle img-md-vehicle rounded-4 my-2" src="@item.ImageVehicle" alt="">
                                 <span class="fs-7 bg-primary-subtle p-1 rounded-5">@item.VehicleVariant.VariantName</span>
                                 <h6 class="text-uppercase fw-bold mt-3">@item.VehicleName</h6>
-                                @if (item.Reviews.Count == 0)
-                                {
-                                    <div class="fs-7">Chưa có đánh giá</div>
-
-                                }
-                                else
-                                {
-                                    <div class="fs-7">
-                                        @if (item.Reviews.Count == 0)
+                                <div class="fs-7">
+                                    @if (item.Reviews.Count == 0)
+                                    {
+                                        @Html.Raw("Chưa có đánh giá")
+                                    }
+                                    else
+                                    {
+                                        float rating = 0;
+                                        foreach (var review in item.Reviews)
                                         {
-                                            @Html.Raw("Chưa có đánh giá");
+                                            rating += review.Rating;
                                         }
-                                        else
-                                        {
-                                            float rating = 0;
-                                            foreach (var review in item.Reviews)
-                                            {
-                                                rating += review.Rating;
-                                            }
-                                            <i class="fa-solid fa-star text-warning"></i>
-                                            @Html.Raw((rating / item.Reviews.Count).ToString("0.0"))
-                                        }
-                                    </div>
-                                }
-                                <hr class="my-3">
-                                <div class="row my-2">
-                                    <div class="col-sm-9">
-                                        <div class="fs-7 pt-1 fw-bold text-body-tertiary"><i class="fa-solid fa-location-dot mx-1 text-body"></i>@item.District.name, @item.District.Province.Name</div>
-                                    </div>
-                                    <div class="col-sm-3 p-0">
-                                        <div class="fs-6 fw-bold text-success ms-lg-3 ms-sm-0 ms-md-0">@(Math.Round(item.VehiclePrice / 1000, 0).ToString("0") + "k")</div>
+                                        <i class="fa-solid fa-star text-warning"></i>
+                                        @Html.Raw((rating / item.Reviews.Count).ToString("0.0"))
+                                    }
+                                </div>
+                                    <hr class="my-3">
+                                    <div class="row my-2">
+                                        <div class="col-sm-9">
+                                            <div class="fs-7 pt-1 fw-bold text-body-tertiary"><i class="fa-solid fa-location-dot mx-1 text-body"></i>@item.District.name, @item.District.Province.Name</div>
+                                        </div>
+                                        <div class="col-sm-3 p-0">
+                                            <div class="fs-6 fw-bold text-success ms-lg-3 ms-sm-0 ms-md-0">@(Math.Round(item.VehiclePrice / 1000, 0).ToString("0") + "k")</div>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
                         </a>
                     </div>
                 }

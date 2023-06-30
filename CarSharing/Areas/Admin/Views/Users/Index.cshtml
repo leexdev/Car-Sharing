@@ -1,0 +1,319 @@
+﻿@using PagedList;
+@using PagedList.Mvc;
+@model CarSharing.Models.VehicleManagementModel
+@using CarSharing.Helpers
+@using CarSharing.Controllers
+
+@{
+    ViewBag.Title = "Quản lý người dùng";
+    ViewBag.ActionCurrent = "Index";
+    ViewBag.ControllerCurrent = "Users";
+    //var pager = Html.PagedListPager(Model.PagedUsers, page => Url.Action("Index", new { page, currentFilter = ViewBag.CurrentFilter }), PagedListRenderOptions.ClassicPlusFirstAndLast);
+    var pager = Model.PagedUsers;
+    int totalPages = (int)Math.Ceiling((double)pager.TotalItemCount / pager.PageSize);
+    int maxVisiblePages = 5;
+    int startPage = Math.Max(1, pager.PageNumber - maxVisiblePages / 2);
+    int endPage = Math.Min(startPage + maxVisiblePages - 1, totalPages);
+
+    int itemsPerPage = pager.PageSize;
+
+    if (endPage - startPage + 1 < maxVisiblePages)
+    {
+        startPage = Math.Max(1, endPage - maxVisiblePages + 1);
+    }
+}
+
+<div class="main-content">
+    <div class="row">
+        <div class="col-md-12">
+            <div class="table-wrapper">
+                <div class="table-title">
+                    <div class="row">
+                        <div class="col-sm-6 p-0 flex justify-content-lg-start justify-content-center">
+                            <h2 class="ml-lg-2">Quản lý người dùng</h2>
+                        </div>
+                        <div class="col-sm-6 p-0 flex justify-content-lg-end justify-content-center">
+                            <a href="#addUserModal" class="btn btn-success" data-toggle="modal">
+                                <i class="material-icons">&#xE147;</i>
+                                <span>Thêm</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                <table class="table table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th class="text-center">
+                                @Html.DisplayNameFor(model => model.User.FullName)
+                            </th>
+                            <th class="text-center">
+                                @Html.DisplayNameFor(model => model.User.Email)
+                            </th>
+                            <th class="text-center">
+                                @Html.DisplayNameFor(model => model.User.Phone)
+                            </th>
+                            <th class="text-center">
+                                @Html.DisplayNameFor(model => model.User.Address)
+                            </th>
+                            <th class="text-center">
+                                @Html.DisplayNameFor(model => model.User.Role)
+                            </th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                        @foreach (var pagedUser in Model.PagedUsers)
+                        {
+                            foreach (var User in pagedUser.ListUsers)
+                            {
+                                <tr>
+                                    <td class="text-center" style="width:20%">
+                                        @Html.DisplayFor(modelItem => User.FullName)
+                                    </td>
+                                    <td class="text-center">
+                                        @Html.DisplayFor(modelItem => User.Email)
+                                    </td>
+                                    <td class="text-center">
+                                        @Html.DisplayFor(modelItem => User.Phone)
+                                    </td>
+                                    <td class="text-center">
+                                        @Html.DisplayFor(modelItem => User.Address)
+                                    </td>
+                                    <td class="text-center">
+                                        @Html.DisplayFor(modelItem => User.Role)
+                                    </td>
+                                    <td class="text-center">
+                                        <div class="d-flex justify-content-center align-items-center">
+                                            <div class="mr-2">
+                                                <a href="#updateUserModal" class="edit" data-toggle="modal" data-id="@User.UserId" data-avatar="@User.Avatar" data-name="@User.FullName" data-email="@User.Email" data-phone="@User.Phone" data-address="@User.Address" data-role="@User.Role">
+                                                    <i class="material-icons" data-toggle="tooltip" title="Sửa">&#xE254;</i>
+                                                </a>
+                                            </div>
+                                            <div>
+                                                <a href="#deleteUserModal" class="delete" data-toggle="modal" data-id="@User.UserId">
+                                                    <i class="material-icons" data-toggle="tooltip" title="Xóa">&#xE872;</i>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+
+                <div class="clearfix">
+                    <div class="hint-text">Hiển thị <b>@Model.PagedUsers.Count</b> trong số <b>@Model.ListUsers.Count</b></div>
+                    <ul class="pagination">
+                        @if (pager.HasPreviousPage)
+                        {
+                            <li class="page-item">
+                                <a href="@Url.Action("Index", new { page = 1, currentFilter = ViewBag.CurrentFilter })" class="page-link">Đầu</a>
+                            </li>
+                            <li class="page-item">
+                                <a href="@Url.Action("Index", new { page = pager.PageNumber - 1, currentFilter = ViewBag.CurrentFilter })" class="page-link">Trước</a>
+                            </li>
+                        }
+
+                        @for (int pageNumber = startPage; pageNumber <= endPage; pageNumber++)
+                        {
+                            <li class="page-item @(pager.PageNumber == pageNumber ? "active" : "")">
+                                <a href="@Url.Action("Index", new { page = pageNumber, currentFilter = ViewBag.CurrentFilter })" class="page-link">@pageNumber</a>
+                            </li>
+                        }
+
+                        @if (pager.HasNextPage)
+                        {
+                            <li class="page-item">
+                                <a href="@Url.Action("Index", new { page = pager.PageNumber + 1, currentFilter = ViewBag.CurrentFilter })" class="page-link">Tiếp</a>
+                            </li>
+                            <li class="page-item">
+                                <a href="@Url.Action("Index", new { page = totalPages, currentFilter = ViewBag.CurrentFilter })" class="page-link">Cuối</a>
+                            </li>
+                        }
+                    </ul>
+                </div>
+
+                @using (Html.BeginForm("Create", "Users", FormMethod.Post))
+                {
+                    @Html.AntiForgeryToken()
+                    <div class="modal fade" tabindex="-1" id="addUserModal" role="dialog">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Thêm người dùng</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                @Html.LabelFor(model => model.User.Email)
+                                                @Html.TextBoxFor(model => model.User.Email, new { @class = "form-control mb-3", required = "required", type = "email" })
+                                            </div>
+                                            <div class="col-md-6">
+                                                @Html.LabelFor(model => model.User.FullName)
+                                                @Html.TextBoxFor(model => model.User.FullName, new { @class = "form-control mb-3", type = "phone"})
+                                            </div>
+                                            <div class="col-md-6">
+                                                @Html.LabelFor(model => model.User.Phone)
+                                                @Html.TextBoxFor(model => model.User.Phone, new { @class = "form-control mb-3" })
+                                            </div>
+                                            <div class="col-md-6">
+                                                @Html.LabelFor(model => model.User.Address)
+                                                @Html.TextBoxFor(model => model.User.Address, new { @class = "form-control mb-3" })
+                                            </div>
+                                            <div class="col-md-6">
+                                                @Html.LabelFor(model => model.User.Role)
+                                                <select id="roleUser" name="User.Role" class="form-control mb-3" required>
+                                                    <option value="admin">Quản trị viên</option>
+                                                    <option value="partner">Đối tác</option>
+                                                    <option value="user">Người dùng</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy bỏ</button>
+                                        <input type="submit" value="Thêm" class="btn btn-success">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+
+                @using (Html.BeginForm("Edit", "Users", FormMethod.Post))
+                {
+                    @Html.AntiForgeryToken()
+                    <div class="modal fade" tabindex="-1" id="updateUserModal" role="dialog">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Cập nhật người dùng</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                                @Html.HiddenFor(model => model.User.UserId)
+                                @Html.HiddenFor(model => model.User.Avatar)
+                                <div class="modal-body">
+                                    <div class="form-group">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                @Html.LabelFor(model => model.User.Email)
+                                                @Html.TextBoxFor(model => model.User.Email, new { @class = "form-control mb-3", required = "required", disabled = "disable" })
+                                            </div>
+                                            <div class="col-md-6">
+                                                @Html.LabelFor(model => model.User.FullName)
+                                                @Html.TextBoxFor(model => model.User.FullName, new { @class = "form-control mb-3" })
+                                            </div>
+                                            <div class="col-md-6">
+                                                @Html.LabelFor(model => model.User.Phone)
+                                                @Html.TextBoxFor(model => model.User.Phone, new { @class = "form-control mb-3" })
+                                            </div>
+                                            <div class="col-md-6">
+                                                @Html.LabelFor(model => model.User.Address)
+                                                @Html.TextBoxFor(model => model.User.Address, new { @class = "form-control mb-3" })
+                                            </div>
+                                            <div class="col-md-6">
+                                                @Html.LabelFor(model => model.User.Role)
+                                                <select id="roleUser" name="User.Role" class="form-control mb-3" required>
+                                                    <option value="admin">Quản trị viên</option>
+                                                    <option value="partner">Đối tác</option>
+                                                    <option value="user">Người dùng</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy bỏ</button>
+                                        <input type="submit" value="Cập nhật" class="btn btn-success">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+
+                <div class="modal fade" tabindex="-1" id="deleteUserModal" role="dialog">
+                    <div class="modal-dialog" role="document" style="max-width: 600px">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Xóa</h5>
+                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <p>Bạn có muốn xóa người dùng này không?</p>
+                                <p class="text-warning"><small>Hành động này không được hoàn tác</small></p>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy bỏ</button>
+                                <form id="deleteForm" action="@Url.Action("Delete", "Users")" method="post" enctype="multipart/form-data">
+                                    @Html.AntiForgeryToken()
+                                    <input type="hidden" name="id" id="deleteId" value="" />
+                                    <button type="submit" class="btn btn-success">Xóa</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts
+{
+    <script>
+        $(document).ready(function () {
+            $('.edit').click(function () {
+                var userId = $(this).data('id');
+                var email = $(this).data('email');
+                var name = $(this).data('name');
+                var phone = $(this).data('phone');
+                var address = $(this).data('address');
+                var role = $(this).data('role');
+
+                $('#updateUserModal #User_UserId').val(userId);
+                $('#updateUserModal #User_FullName').val(name);
+                $('#updateUserModal #User_Email').val(email);
+                $('#updateUserModal #User_Phone').val(phone);
+                $('#updateUserModal #User_Address').val(address);
+                $('#updateUserModal #roleUser').val(role).prop('selected', true);
+            });
+        });
+
+        $('.delete').click(function () {
+            var userId = $(this).data('id');
+            $('#deleteId').val(userId);
+        });
+
+        $(document).ready(function () {
+            $("#User_Email").on("blur", function () {
+                var emailInput = $(this);
+
+                var email = emailInput.val();
+                $.ajax({
+                    url: "/Admin/Users/CheckEmailExists",
+                    type: "POST",
+                    data: { email: email },
+                    success: function (response) {
+                        if (!response.success) {
+                            alert(response.message);
+                            emailInput.val("");
+                        }
+                    }
+                });
+            });
+        });
+
+
+
+    </script>
+}
